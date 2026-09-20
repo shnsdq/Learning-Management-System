@@ -36,9 +36,9 @@ const Login = () => {
           </div>
  
  
-          <button className='w-[80%] h-[40px] bg-black text-white cursor-pointer flex items-center justify-center rounded-[5px] '>Login</button>
+          <button className='w-[80%] h-[40px] bg-black text-white cursor-pointer flex items-center justify-center rounded-[5px] cursor-pointer'>Login</button>
 
-          <span className=''>Forget Passsword ?</span>
+          <span className='text-[13px] cursor-pointer text-[#585757] '>Forget your Passsword ?</span>
 
           <div className='w-[80%] flex gap-2 items-center justify-center'>
            <div className='w-[25%] h-[0.5px] bg-[#c4c4c4] '></div>
