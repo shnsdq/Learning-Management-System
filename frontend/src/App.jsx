@@ -5,8 +5,10 @@ import Signup from './pages/Signup'
 import {Routes,Route} from 'react-router-dom'
 export const serverUrl = "http://localhost:8000"
 import {ToastContainer} from 'react-toastify'
+import getCurrentUser from './customHooks/getCurrentUser'
 
 const App = () => {
+  getCurrentUser()
   return (
     <>
     <ToastContainer/>
