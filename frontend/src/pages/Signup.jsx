@@ -8,6 +8,8 @@ import axios from 'axios';
 import { serverUrl } from '../App';
 import { toast } from 'react-toastify';
 import { ClipLoader } from 'react-spinners';
+import { useDispatch } from 'react-redux';
+import { setUserData } from '../redux/userSlice';
 
 const Signup = () => {
   const [show,setShow] = useState(false)
@@ -17,6 +19,7 @@ const Signup = () => {
   const [password,setPassword] = useState("")
   const [role,setRole] = useState("student") // Default role is student
   const [loading, setLoading] = useState(false); // State to track loading status
+  const dispatch = useDispatch()
 
   const handleSignup = async () => {
     setLoading(true); // Set loading to true when signup is initiated
@@ -27,9 +30,10 @@ const Signup = () => {
         password,
         role
       },{withCredentials:true});
+      dispatch(setUserData(result.data)); // Update Redux store with user data
       setLoading(false)
       navigate('/')
-      toast.done("Signup successful.");
+      toast.success("Signup successful.");
       
     } catch (error) {
       toast.error("error.response.data.message");
@@ -49,29 +53,29 @@ const Signup = () => {
 
          <div className='flex flex-col gap-1 w-[80%] items-start justify-center px-3'>
           <label htmlFor="name" className='font-semibold'>Name</label>
-          <input id='name' type="text" placeholder='Name' className='border-1 w-[100%] h-[35px] border-[#e7e6e6] text-[15px] px-[20px] onChange={(e) => setName(e.target.value)} '/>
+          <input id='name' type="text" placeholder='Name' className='border-1 w-[100%] h-[35px] border-[#e7e6e6] text-[15px] px-[20px]' onChange={(e) => setName(e.target.value)} value={name} />
          </div>
 
          <div className='flex flex-col gap-1 w-[80%] items-start justify-center px-3'>
           <label htmlFor="email" className='font-semibold'>Email</label>
-          <input id='email' type="text" placeholder='Your Email' className='border-1 w-[100%] h-[35px] border-[#e7e6e6] text-[15px] px-[20px] onChange={(e) => setEmail(e.target.value)} '/>
+          <input id='email' type="text" placeholder='Your Email' className='border-1 w-[100%] h-[35px] border-[#e7e6e6] text-[15px] px-[20px]' onChange={(e) => setEmail(e.target.value)} value={email} />
          </div>
 
          <div className='flex flex-col gap-1 w-[80%] items-start justify-center px-3 relative'>
           <label htmlFor="password" className='font-semibold'>Password</label>
-          <input id='password' type={show ? "text" : "password"} placeholder='Password' className='border-1 w-[100%] h-[35px] border-[#e7e6e6] text-[15px] px-[20px] onChange={(e) => setPassword(e.target.value)} '/>
+          <input id='password' type={show ? "text" : "password"} placeholder='Password' className='border-1 w-[100%] h-[35px] border-[#e7e6e6] text-[15px] px-[20px]' onChange={(e) => setPassword(e.target.value)} value={password} />
           {!show ?  
           <IoEyeOutline onClick={() => setShow(prev => !prev)} className='absolute w-[20px] h-[20px] cursor-pointer right-[5%] bottom-[10%]'/>
           : <IoEye onClick={() => setShow(prev => !prev)} className='absolute w-[20px] h-[20px] cursor-pointer right-[5%] bottom-[10%]' /> }
          </div>
 
          <div className='flex md:w-[50%] w-[70%] items-center justify-between'>
-          <span className='{`px-[10px] py-[5px] border-[2px] border-[#e7e6e6] rounded-xl cursor-pointer hover:border-black ${role === "student" ? "border-black" : "border-[#646464]"}`} onClick={() => setRole("student")} '>Student</span>
+          <span className={`px-[10px] py-[5px] border-[2px] border-[#e7e6e6] rounded-xl cursor-pointer hover:border-black ${role === "student" ? "border-black" : "border-[#646464]"}`} onClick={() => setRole("student")}>Student</span>
 
-          <span className='{`px-[10px] py-[5px] border-[2px] border-[#e7e6e6] rounded-xl cursor-pointer hover:border-black ${role === "educator" ? "border-black" : "border-[#646464]"}`} onClick={() => setRole("educator")} '>Educator</span>
+          <span className={`px-[10px] py-[5px] border-[2px] border-[#e7e6e6] rounded-xl cursor-pointer hover:border-black ${role === "educator" ? "border-black" : "border-[#646464]"}`} onClick={() => setRole("educator")}>Educator</span>
          </div>
 
-         <button className='w-[80%] h-[40px] bg-black text-white cursor-pointer flex items-center justify-center rounded-[5px] onClick={handleSignup} disabled={loading}'>{loading ? <ClipLoader size={30} color='white'/>  :"SignUp"}</button>
+         <button className='w-[80%] h-[40px] bg-black text-white cursor-pointer flex items-center justify-center rounded-[5px]' onClick={handleSignup} disabled={loading}>{loading ? <ClipLoader size={30} color='white'/>  :"SignUp"}</button>
          <div className='w-[80%] flex gap-2 items-center justify-center'>
           <div className='w-[25%] h-[0.5px] bg-[#c4c4c4] '></div>
           <div className='w-[50%] text-[15px] text-[#6f6f6f] flex items-center justify-center '>or continue</div>
