@@ -65,7 +65,7 @@ const Nav = () => {
           }
 
           {userData && <div className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer ">
-            {userData?.name?.charAt(0).toUpperCase()}
+            {userData?.name?.slice(1,0).toUpperCase()}
           </div>}
 
           <div className='w-[200px] h-[65px] flex items-center justify-center border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer ' onClick={()=>navigate("/profile")} >My Profile</div>
