@@ -10,6 +10,8 @@ import { toast } from 'react-toastify';
 import { ClipLoader } from 'react-spinners';
 import { useDispatch } from 'react-redux';
 import { setUserData } from '../redux/userSlice';
+import { signInWithPopup } from 'firebase/auth';
+import { auth, provider } from '../../utils/firebase';
 
 const Signup = () => {
   const [show,setShow] = useState(false)
@@ -30,15 +32,34 @@ const Signup = () => {
         password,
         role
       },{withCredentials:true});
+
       dispatch(setUserData(result.data)); // Update Redux store with user data
       setLoading(false)
       navigate('/')
       toast.success("Signup successful.");
       
     } catch (error) {
-      toast.error("error.response.data.message");
+      toast.error(response.data.message);
     }
   }
+
+  const googleSignUp = async () => {
+    try {
+      const response = await signInWithPopup(auth, provider);
+      let user = response.user;
+      let name = user.displayName
+      let email = user.email
+      const result = await axios.post(serverUrl + "/api/auth/googleauth", {
+        name,email,role}, { withCredentials: true });
+
+      dispatch(setUserData(result.data)); // Update Redux store with user data
+      navigate('/')
+      toast.success("Signup successful.");
+
+  }catch (error) {
+toast.error(response.data.message);
+  }
+}
 
   return (
     <div className='bg-[#dddbdb] w-screen h-[100vh] flex justify-center items-center'>
@@ -82,7 +103,7 @@ const Signup = () => {
           <div className='w-[25%] h-[0.5px] bg-[#c4c4c4] '></div>
          </div>
 
-          <div className='w-[80%] h-[40px] border-1 border-[black] cursor-pointer flex items-center justify-center rounded-[5px] '>
+          <div className='w-[80%] h-[40px] border-1 border-[black] cursor-pointer flex items-center justify-center rounded-[5px] ' onClick={googleSignUp}>
             <img src={google} className='w-[25px] ' alt="Google" />
             <span className='text-[18px] text-gray-500 '>oogle</span>
           </div>
