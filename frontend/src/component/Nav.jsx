@@ -45,7 +45,7 @@ const Nav = () => {
             {userData?.name?.slice(0,1).toUpperCase()}
           </div>}
 
-          {userData?.role === "educator" && <div className='px-[20px] py-[10px] border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer '>Dashboard</div>}
+          {userData?.role === "educator" && <div className='px-[20px] py-[10px] border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer ' onClick={()=>navigate("/dashboard")}>Dashboard</div>}
 
           {!userData
             ? <span className='px-[20px] py-[10px] border-2 border-white text-white bg-[#000000d5] rounded-[10px] text-[18px] font-light cursor-pointer' onClick={() => navigate('/login')}>Login</span>
@@ -75,7 +75,7 @@ const Nav = () => {
 
           <div className='w-[200px] h-[65px] flex items-center justify-center border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer '>My Courses</div>
 
-          {userData?.role === "educator" && <div className='w-[200px] h-[65px] flex items-center justify-center border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer '>Dashboard</div>}
+          {userData?.role === "educator" && <div className='w-[200px] h-[65px] flex items-center justify-center border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer ' onClick={()=>navigate("/dashboard")}>Dashboard</div>}
 
            {!userData
             ? <span className='w-[200px] h-[65px] flex items-center justify-center border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer' onClick={() => navigate('/login')}>Login</span>
