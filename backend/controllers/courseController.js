@@ -1,5 +1,5 @@
-import uploadOnCloudinary from "../config/cloudinary"
-import Course from "../models/courseModel"
+import uploadOnCloudinary from "../config/cloudinary.js"
+import Course from "../models/courseModel.js"
 
 
 export const createCourse = async (req,res) => {
@@ -11,7 +11,7 @@ export const createCourse = async (req,res) => {
 
         const course = await Course.create({
             title,
-            description,
+            category,
             creator:req.userId
         })
 
