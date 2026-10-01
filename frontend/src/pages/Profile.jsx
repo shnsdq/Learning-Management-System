@@ -14,7 +14,7 @@ const Profile = () => {
         <div className='flex flex-col items-center text-center'>
           {userData?.photoUrl ? <img src={userData?.photoUrl} className='w-24 h-24 rounded-full object-cover border-4 border-[black]' alt="" /> :
             <div className='w-24 h-24 rounded-full text-white flex items-center justify-center text-[30px] border-2 bg-[black] border-white'>
-              {userData?.name.slice(0, 1).toUpperCase()}
+              {userData?.name.slice(0,1).toUpperCase()}
             </div>
           }
 
