@@ -1,13 +1,30 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FaArrowLeftLong } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
 import img from "../../assets/empty.jpg"
 import { FaEdit } from "react-icons/fa";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { serverUrl } from '../../App';
+import { setCreatorCourseData } from '../../redux/courseSlice';
 
 const Courses = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const {userData} = useSelector(state => state.user)
   const { creatorCourseData } = useSelector(state => state.course)
+      useEffect(() => {
+          const creatorCourses = async () => {
+              try {
+                  const result = await axios.get(serverUrl + '/api/course/getcreator', {withCredentials:true} )
+                   dispatch(setCreatorCourseData(result.data))
+  
+              } catch (error) {
+                  toast.error(response.data.error.message)
+              }
+          }
+          creatorCourses()
+      },[userData])
 
   return (
     <div className='flex min-h-screen bg-gray-100'>
@@ -51,7 +68,7 @@ const Courses = () => {
 
                   <td className='px-4 py-3'><span className={`px-3 py-1 rounded-full text-xs ${course.isPublished ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"} `}>{course.isPublished ? "Published":"Draft"}</span> </td>
                   <td className='px-4 py-3'>
-                    <FaEdit className='text-gray-600 hover:text-blue-600 cursor-pointer' />
+                    <FaEdit className='text-gray-600 hover:text-blue-600 cursor-pointer' onClick={()=>navigate(`/editcourse/${course?._id}`)}/>
                   </td>
                 </tr>
               ))}
@@ -65,17 +82,20 @@ const Courses = () => {
 
         {/* for small screen table */}
         <div className='md:hidden space-y-4'>
-          <div className='bg-white rounded-lg shadow p-4 flex flex-col gap-3'>
+         { creatorCourseData?.map((course, index) => (
+          <div key={index} className='bg-white rounded-lg shadow p-4 flex flex-col gap-3'>
             <div className='flex ga-4 items-center'>
-              <img src={img} alt="" className='w-16 rounded-md object-cover' />
+            { course?.thumbnail ? <img src={course?.thumbnail} alt="" className='w-16 rounded-md object-cover' /> :  <img src={img} alt="" className='w-16 rounded-md object-cover' /> }
               <div className='flex-1'>
-                <h2 className='font-medium text-sm'>title</h2>
-                <p className='text-gray-600 text-xs mt-1'>₹ NA</p>
+                <h2 className='font-medium text-sm'>{course?.title}</h2>
+               {course?.price ? <p className='text-gray-600 text-xs mt-1'>₹ {course?.price} </p> : <p className='text-gray-600 text-xs mt-1'>₹ NA</p> }
               </div>
-              <FaEdit className='text-gray-600 hover:text-blue-600 cursor-pointer' />
+              <FaEdit className='text-gray-600 hover:text-blue-600 cursor-pointer' onClick={()=>navigate(`/editcourse/${course?._id}`)}/>
             </div>
-            <span className='w-fit px-3 py-2 text-xs rounded-full bg-red-100 text-red-600'>Draft</span>
+            <span className={`w-fit px-3 py-2 text-xs rounded-full ${course?.isPublished ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600" }`}>{course?.isPublished ? "Published":"Draft"}</span>
           </div>
+          ))}
+
           <p className='text-center text-sm text-gray-400 mt-4 '>A list of your recent courses</p>
         </div>
       </div>
