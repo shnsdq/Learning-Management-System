@@ -14,6 +14,7 @@ import Dashboard from './pages/Educator/Dashboard'
 import Courses from './pages/Educator/Courses'
 import CreateCourses from './pages/Educator/CreateCourses'
 import getCreatorCourse from './customHooks/getCreatorCourse'
+import EditCourse from './pages/Educator/EditCourse'
 
 const App = () => {
   getCurrentUser()
@@ -24,14 +25,15 @@ const App = () => {
     <ToastContainer/>
     <Routes>
       <Route path='/' element={<Home />} />
-      <Route path='/signup' element={!userData ?<Signup /> : <Navigate to={'/'}/>} />
+      <Route path='/signup' element={!userData ? <Signup /> : <Navigate to={'/'}/>} />
       <Route path='/login' element={<Login />} />
       <Route path='/profile' element={userData ? <Profile /> : <Navigate to={'/signup'} />} />
       <Route path='/forget' element={!userData ? <ForgetPassword /> : <Navigate to={'/'} />} />
       <Route path='/editprofile' element={userData ? <EditProfile /> : <Navigate to={'/signup'} />} />
-      <Route path='/dashboard' element={userData ?.role === "educator" ?  <Dashboard /> : <Navigate to={'/signup'} />} />
-      <Route path='/courses' element={userData ?.role === "educator" ?  <Courses /> : <Navigate to={'/signup'} />} />
-      <Route path='/createcourse' element={userData ?.role === "educator" ?  <CreateCourses /> : <Navigate to={'/signup'} />} />
+      <Route path='/dashboard' element={userData?.role === "educator" ?  <Dashboard /> : <Navigate to={'/signup'} />} />
+      <Route path='/courses' element={userData?.role === "educator" ?  <Courses /> : <Navigate to={'/signup'} />} />
+      <Route path='/createcourse' element={userData?.role === "educator" ?  <CreateCourses /> : <Navigate to={'/signup'} />} />
+      <Route path='/editcourse/:courseId' element={userData?.role === "educator" ?  <EditCourse /> : <Navigate to={'/signup'} />} />
     </Routes>
     </>
   )
