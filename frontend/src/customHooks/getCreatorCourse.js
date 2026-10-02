@@ -21,7 +21,7 @@ const getCreatorCourse = () => {
             }
         }
         creatorCourses()
-    },[])
+    },[userData])
   )
 }
 
