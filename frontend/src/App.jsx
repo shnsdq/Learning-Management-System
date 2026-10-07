@@ -18,6 +18,7 @@ import EditCourse from './pages/Educator/EditCourse'
 import getPublishedCourse from './customHooks/getPublishedCourse'
 import AllCourses from './pages/AllCourses'
 import CreateLecture from './pages/Educator/CreateLecture'
+import EditLecture from './pages/Educator/EditLecture'
 
 const App = () => {
   getCurrentUser()
@@ -40,6 +41,7 @@ const App = () => {
       <Route path='/createcourse' element={userData?.role === "educator" ?  <CreateCourses /> : <Navigate to={'/signup'} />} />
       <Route path='/editcourse/:courseId' element={userData?.role === "educator" ?  <EditCourse /> : <Navigate to={'/signup'} />} />
       <Route path='/createlecture/:courseId' element={userData?.role === "educator" ?  <CreateLecture /> : <Navigate to={'/signup'} />} />
+      <Route path='/editlecture/:courseId/:lectureId' element={userData?.role === "educator" ?  <EditLecture /> : <Navigate to={'/signup'} />} />
     </Routes>
     </>
   )
