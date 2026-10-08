@@ -9,10 +9,12 @@ import { serverUrl } from '../../App';
 import { setCreatorCourseData } from '../../redux/courseSlice';
 
 const Courses = () => {
+  
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const {userData} = useSelector(state => state.user)
   const { creatorCourseData } = useSelector(state => state.course)
+
       useEffect(() => {
           const creatorCourses = async () => {
               try {
