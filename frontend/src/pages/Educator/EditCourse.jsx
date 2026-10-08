@@ -13,7 +13,7 @@ import { setCourseData } from '../../redux/courseSlice';
 const EditCourse = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const {courseData} = useSelector(state=>state.course)
+  const { courseData } = useSelector(state => state.course)
   const { courseId } = useParams()
   const thumb = useRef()
   const [isPublished, setIsPublished] = useState(false)
@@ -73,22 +73,23 @@ const EditCourse = () => {
     formData.append("price", price)
     formData.append("thumbnail", backendImage)
     formData.append("isPublished", isPublished)
+
     try {
       const result = await axios.post(serverUrl + `/api/course/editcourse/${courseId}`, formData, { withCredentials: true })
 
       const updateData = result.data
-      if(updateData.isPublished){
+      if (updateData.isPublished) {
         const updateCourses = courseData.map(c => c._id === courseId ? updateData : c)
 
-        if(!courseData.some(c=> c._id === courseId))
-        {
+        if (!courseData.some(c => c._id === courseId)) {
           updateCourses.push(updateData)
         }
         dispatch(setCourseData(updateCourses))
+        
       }
-      else{
-         const filterCourses = courseData.filter(c=> c._id !== courseId)
-          dispatch(setCourseData(filterCourses))
+      else {
+        const filterCourses = courseData.filter(c => c._id !== courseId)
+        dispatch(setCourseData(filterCourses))
       }
       setLoading(false)
       toast.success(result.data.message)
@@ -104,8 +105,8 @@ const EditCourse = () => {
     setLoading1(true)
     try {
       const result = await axios.delete(serverUrl + `/api/course/remove/${courseId}`, { withCredentials: true })
-      const filterCourses = courseData.filter(c=> c._id !== courseId)
-      dispatch(setCourseData(filterCourses)) 
+      const filterCourses = courseData.filter(c => c._id !== courseId)
+      dispatch(setCourseData(filterCourses))
       setLoading1(false)
       toast.success(result.data.message)
       navigate('/courses')
@@ -124,7 +125,7 @@ const EditCourse = () => {
 
         <h2 className='text-2xl font-semibold md:pl-[60px] '>Add Detail Information regarding the course</h2>
         <div className='space-x-2 space-y-2'>
-          <button className='bg-black text-white px-4 py-2 rounded-md' onClick={()=>navigate(`/createlecture/${selectCourse?._id}`)}>Go to Lecture page</button>
+          <button className='bg-black text-white px-4 py-2 rounded-md' onClick={() => navigate(`/createlecture/${selectCourse?._id}`)}>Go to Lecture page</button>
         </div>
 
       </div>
