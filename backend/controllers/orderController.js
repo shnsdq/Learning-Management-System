@@ -22,7 +22,7 @@ export const RazorpayOrder = async (req, res) => {
             receipt: `${courseId}.toString()`
         }
 
-        const order = await RazorpayInstance.orders.create(options)
+        const order = await RazorPayInstance.orders.create(options)
         return res.status(200).json(order)
     } catch (error) {
         return res.status(500).json({ message: `Failed to create Razorpay Order ${error}` })
