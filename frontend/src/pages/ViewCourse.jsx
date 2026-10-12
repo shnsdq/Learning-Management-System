@@ -22,6 +22,7 @@ const ViewCourse = () => {
   const [selectedLecture, setSelectedLecture] = useState(null)
   const [creatorData, setCreatorData] = useState(null)
   const [creatorCourses, setCreatorCourses] = useState(null)
+  const [isEnrolled, setIsEnrolled] = useState(false)
 
   const fetchCourseData = async () => {
     courseData.map((course) => {
@@ -49,10 +50,17 @@ const ViewCourse = () => {
     handleCreator()
   }, [selectedCourse])
 
+  const checkEnrollment = ()=>{
+    const verify = userData?.enrolledCourses?.some(c => (typeOf(c) === 'string' ? c : c._id).toString() === courseId?.toString() )
+    if(verify){
+      setIsEnrolled(true)
+    }
+  }
+
   useEffect(() => {
     fetchCourseData()
-
-  }, [courseData, courseId])
+    checkEnrollment()
+  }, [courseData, courseId,userData])
 
   useEffect(() => {
     if (creatorData?._id && courseData.length > 0) {
@@ -83,6 +91,7 @@ const ViewCourse = () => {
               userId
             },
               { withCredentials: true })
+              setIsEnrolled(true)
             toast.success(verifyPayment.data.message)
           } catch (error) {
             toast.error(error.response.data.message)
@@ -130,7 +139,8 @@ const ViewCourse = () => {
                 <li>✅ 10+ hours of video content </li>
                 <li>✅ Lifetime across to course materials</li>
               </ul>
-              <button className='bg-[black] text-white px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={() => handleEnroll(userData._id, courseId)}>Enroll Now</button>
+              {!isEnrolled ? <button className='bg-[black] text-white px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={() => handleEnroll(userData._id, courseId)}>Enroll Now</button> 
+              : <button className='bg-green-100 text-green-500 px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={()=>navigate(`/viewlecture/${courseId}`)}>Watch Now</button> }
 
             </div>
           </div>
