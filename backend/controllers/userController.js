@@ -4,7 +4,7 @@ import User from "../models/userModel.js";
 export const getCurrentUser = async (req, res) => {
     try {
         const userId = req.userId;
-        const user = await User.findById(userId).select('-password'); // Exclude password from the response
+        const user = await User.findById(userId).select('-password').populate("enrolledCourses"); // Exclude password from the response
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
