@@ -40,12 +40,12 @@ const Nav = () => {
           {!userData && <IoPersonCircle className='w-[50px] h-[50px] fill-black cursor-pointer' onClick={() => setShow(prev => !prev)} />
           }
 
-          {userData?.photoUrl ? <img src={userData?.photoUrl} alt="" className='w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer' onClick={() => setShow(prev => !prev)} /> 
-           : <div className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer " onClick={() => setShow(prev => !prev)}>
-            {userData?.name?.slice(0,1).toUpperCase()}
-          </div>}
+          {userData?.photoUrl ? <img src={userData?.photoUrl} alt="" className='w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer' onClick={() => setShow(prev => !prev)} />
+            : <div className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer " onClick={() => setShow(prev => !prev)}>
+              {userData?.name?.slice(0, 1).toUpperCase()}
+            </div>}
 
-          {userData?.role === "educator" && <div className='px-[20px] py-[10px] border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer ' onClick={()=>navigate("/dashboard")}>Dashboard</div>}
+          {userData?.role === "educator" && <div className='px-[20px] py-[10px] border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer ' onClick={() => navigate("/dashboard")}>Dashboard</div>}
 
           {!userData
             ? <span className='px-[20px] py-[10px] border-2 border-white text-white bg-[#000000d5] rounded-[10px] text-[18px] font-light cursor-pointer' onClick={() => navigate('/login')}>Login</span>
@@ -53,8 +53,8 @@ const Nav = () => {
           }
 
           {show && <div className='absolute top-[110%] right-[15%] flex items-center flex-col justify-center gap-2 text-[16px] rounded-md bg-[white] px-[15px] py-[10px] border-[2px] border-black hover:border-white hover:text-white cursor-pointer hover:bg-black '>
-            <span className='bg-[black] text-white px-[30px] py-[10px] rounded-2xl hover:bg-gray-600 ' onClick={()=>navigate("/profile")} >My Profile</span>
-            <span className='bg-[black] text-white px-[30px] py-[10px] rounded-2xl hover:bg-gray-600 '>My Courses</span>
+            <span className='bg-[black] text-white px-[30px] py-[10px] rounded-2xl hover:bg-gray-600 ' onClick={() => navigate("/profile")} >My Profile</span>
+            <span className='bg-[black] text-white px-[30px] py-[10px] rounded-2xl hover:bg-gray-600 ' onClick={()=>navigate('/mycourses')}>My Courses</span>
           </div>}
 
         </div>
@@ -65,19 +65,19 @@ const Nav = () => {
           {!userData && <IoPersonCircle className='w-[50px] h-[50px] fill-black cursor-pointer' />
           }
 
-          {userData?.photoUrl 
-          ? <img src={userData?.photoUrl} alt="" className='w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer' /> 
-          : <div className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer ">
-            {userData?.name?.slice(0,1).toUpperCase()}
-          </div>}
+          {userData?.photoUrl
+            ? <img src={userData?.photoUrl} alt="" className='w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer' />
+            : <div className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer ">
+              {userData?.name?.slice(0, 1).toUpperCase()}
+            </div>}
 
-          <div className='w-[200px] h-[65px] flex items-center justify-center border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer ' onClick={()=>navigate("/profile")} >My Profile</div>
+          <div className='w-[200px] h-[65px] flex items-center justify-center border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer ' onClick={() => navigate("/profile")} >My Profile</div>
 
-          <div className='w-[200px] h-[65px] flex items-center justify-center border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer '>My Courses</div>
+          <div className='w-[200px] h-[65px] flex items-center justify-center border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer ' onClick={()=>navigate('/mycourses')}>My Courses</div>
 
-          {userData?.role === "educator" && <div className='w-[200px] h-[65px] flex items-center justify-center border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer ' onClick={()=>navigate("/dashboard")}>Dashboard</div>}
+          {userData?.role === "educator" && <div className='w-[200px] h-[65px] flex items-center justify-center border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer ' onClick={() => navigate("/dashboard")}>Dashboard</div>}
 
-           {!userData
+          {!userData
             ? <span className='w-[200px] h-[65px] flex items-center justify-center border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer' onClick={() => navigate('/login')}>Login</span>
             : <span className='w-[200px] h-[65px] flex items-center justify-center border-2 border-white text-white bg-[black] rounded-[10px] text-[18px] font-light cursor-pointer' onClick={handleLogout} > LogOut </span>
           }
