@@ -11,6 +11,7 @@ import { serverUrl } from '../App'
 import axios from 'axios'
 import Card from '../component/Card'
 import { toast } from 'react-toastify'
+import { ClipLoader } from 'react-spinners'
 
 const ViewCourse = () => {
 
@@ -23,6 +24,9 @@ const ViewCourse = () => {
   const [creatorData, setCreatorData] = useState(null)
   const [creatorCourses, setCreatorCourses] = useState(null)
   const [isEnrolled, setIsEnrolled] = useState(false)
+  const [rating, setRating] = useState(0)
+  const [comment, setComment] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const fetchCourseData = async () => {
     courseData.map((course) => {
@@ -50,9 +54,9 @@ const ViewCourse = () => {
     handleCreator()
   }, [selectedCourse])
 
-  const checkEnrollment = ()=>{
-    const verify = userData?.enrolledCourses?.some(c => (typeOf(c) === 'string' ? c : c._id).toString() === courseId?.toString() )
-    if(verify){
+  const checkEnrollment = () => {
+    const verify = userData?.enrolledCourses?.some(c => (typeOf(c) === 'string' ? c : c._id).toString() === courseId?.toString())
+    if (verify) {
       setIsEnrolled(true)
     }
   }
@@ -60,7 +64,7 @@ const ViewCourse = () => {
   useEffect(() => {
     fetchCourseData()
     checkEnrollment()
-  }, [courseData, courseId,userData])
+  }, [courseData, courseId, userData])
 
   useEffect(() => {
     if (creatorData?._id && courseData.length > 0) {
@@ -91,7 +95,7 @@ const ViewCourse = () => {
               userId
             },
               { withCredentials: true })
-              setIsEnrolled(true)
+            setIsEnrolled(true)
             toast.success(verifyPayment.data.message)
           } catch (error) {
             toast.error(error.response.data.message)
@@ -102,6 +106,19 @@ const ViewCourse = () => {
       rzp.open()
     } catch (error) {
       toast.error("Something went wrong while enrolling.")
+    }
+  }
+
+  const handleReview = async () => {
+    setLoading(true)
+    try {
+      const result = await axios.post(serverUrl + '/api/review/createreview', { rating, comment, courseId }, { withCredentials: true })
+      setLoading(false)
+      toast.success("Review Added")
+
+    } catch (error) {
+      setLoading(false)
+      toast.error(error.response.data.message)
     }
   }
 
@@ -139,8 +156,8 @@ const ViewCourse = () => {
                 <li>✅ 10+ hours of video content </li>
                 <li>✅ Lifetime across to course materials</li>
               </ul>
-              {!isEnrolled ? <button className='bg-[black] text-white px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={() => handleEnroll(userData._id, courseId)}>Enroll Now</button> 
-              : <button className='bg-green-100 text-green-500 px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={()=>navigate(`/viewlecture/${courseId}`)}>Watch Now</button> }
+              {!isEnrolled ? <button className='bg-[black] text-white px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={() => handleEnroll(userData._id, courseId)}>Enroll Now</button>
+                : <button className='bg-green-100 text-green-500 px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={() => navigate(`/viewlecture/${courseId}`)}>Watch Now</button>}
 
             </div>
           </div>
@@ -211,14 +228,16 @@ const ViewCourse = () => {
           <div className='mb-4'>
             <div className='flex gap-1 mb-2'>
               {
-                [1, 2, 3, 4, 5].map((star) => {
-                  return <FaStar key={star} className='fill-gray-300' />
-                })
+                [1, 2, 3, 4, 5].map((star) => (
+                  <FaStar key={star}
+                    onClick={() => setRating(star)}
+                    className={star <= rating ? "fill-amber-300" : "fill-gray-300"} />
+                ))
               }
             </div>
-            <textarea name="" className='w-full border border-gray-300 rounded-lg p-2' placeholder='Write your review here...' rows={3} />
+            <textarea onChange={(e) => setComment(e.target.value)} value={comment} className='w-full border border-gray-300 rounded-lg p-2' placeholder='Write your review here...' rows={3} />
 
-            <button className='bg-black text-white mt-3 px-4 py-2 rounded hover:bg-gray-800'>Submit Review</button>
+            <button className='bg-black text-white mt-3 px-4 py-2 rounded hover:bg-gray-800' disabled={loading} onClick={handleReview}> {loading ? <ClipLoader size={30} color='white' /> : "Submit Review "}</button>
 
           </div>
 
