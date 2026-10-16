@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { FaArrowLeftLong } from 'react-icons/fa6'
-import {Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts'
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 const Dashboard = () => {
     const { userData } = useSelector(state => state.user)
@@ -19,7 +19,15 @@ const Dashboard = () => {
         {
             name: course.title?.slice(0, 10) + "...",
             enrolled: course.enrolledStudents?.length || 0
-        })) || []
+        })) || [];
+
+        const totalEarning = creatorCourseData?.reduce((sum,course)=>{
+
+            const studentCount = course.enrolledStudents?.length || 0;
+            const courseRevenue = course.price ? course.price *  studentCount : 0
+
+            return sum + courseRevenue
+        },0) || 0
 
     return (
         <div className='flex min-h-screen bg-gray-100'>
@@ -32,7 +40,7 @@ const Dashboard = () => {
 
                     <div className='text-center md:text-left space-y-1'>
                         <h1 className='text-2xl font-bold text-gray-800'>Welcome ,{userData?.name || "Educator"} 👋</h1>
-                        <h1 className='text-xl font-semibold text-gray-800'>Total Earning : 0</h1>
+                        <h1 className='text-xl font-semibold text-gray-800'>Total Earning : ₹{totalEarning.toLocaleString} </h1>
                         <p className='text-sm text-gray-600'>{userData?.description || "Start creating courses for your students"} </p>
                         <h1 className='px-[10px] text-center py-[10px] border-2 bg-black border-black text-white rounded-[1px] text-[15px] font-light flex items-center justify-center cursor-pointer ' onClick={() => navigate('/courses')}>Create Courses</h1>
                     </div>
@@ -47,11 +55,11 @@ const Dashboard = () => {
                         <h2 className='text-lg font-semibold mb-4'>Course Progress (Lectures)</h2>
                         <ResponsiveContainer width="100%" height={300} >
                             <BarChart data={CourseProgressData}>
-                                <CartesianGrid strokeDasharray="3 3"/>
+                                <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="name" />
-                                <YAxis/>
-                                <Tooltip/>
-                                <Bar dataKey="lectures" fill='black' radius={[5,5,0,0]} />
+                                <YAxis />
+                                <Tooltip />
+                                <Bar dataKey="lectures" fill='black' radius={[5, 5, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
@@ -61,11 +69,11 @@ const Dashboard = () => {
                         <h2 className='text-lg font-semibold mb-4'>Students Enrollment</h2>
                         <ResponsiveContainer width="100%" height={300} >
                             <BarChart data={EnrollData}>
-                                <CartesianGrid strokeDasharray="3 3"/>
+                                <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="name" />
-                                <YAxis/>
-                                <Tooltip/>
-                                <Bar dataKey="enrolled" fill='black' radius={[5,5,0,0]} />
+                                <YAxis />
+                                <Tooltip />
+                                <Bar dataKey="enrolled" fill='black' radius={[5, 5, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
