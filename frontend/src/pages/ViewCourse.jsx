@@ -115,12 +115,28 @@ const ViewCourse = () => {
       const result = await axios.post(serverUrl + '/api/review/createreview', { rating, comment, courseId }, { withCredentials: true })
       setLoading(false)
       toast.success("Review Added")
+      setRating(0)
+      setComment("")
 
     } catch (error) {
       setLoading(false)
       toast.error(error.response.data.message)
+      setRating(0)
+      setComment("")
     }
   }
+
+  const calculateAvgReview = (reviews) => {
+      if(!reviews || reviews.length === 0){
+        return 0
+      }
+
+      const total = reviews.reduce((sum, review)=> sum + review.rating , 0 )
+      return (total / reviews.length).toFixed(1)
+  }
+
+  const avgRating = calculateAvgReview(selectedCourse?.reviews)
+
 
   return (
     <div className='min-h-screen bg-gray-50 p-6'>
@@ -143,7 +159,7 @@ const ViewCourse = () => {
 
             <div className='flex items-start flex-col justify-between'>
               <div className='text-yellow-500 font-medium flex gap-2'>
-                <span className='flex items-center justify-start gap-1'><FaStar />5 </span>
+                <span className='flex items-center justify-start gap-1'><FaStar />{avgRating} </span>
                 <span className='text-gray-400'>(1,200 Reviews) </span>
               </div>
 
