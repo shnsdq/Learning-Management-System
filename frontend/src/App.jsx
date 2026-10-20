@@ -3,7 +3,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import {Routes,Route, Navigate} from 'react-router-dom'
-export const serverUrl = "http://localhost:8000"
+export const serverUrl = "https://learning-management-system-ozqw.onrender.com"
 import {ToastContainer} from 'react-toastify'
 import getCurrentUser from './customHooks/getCurrentUser'
 import { useSelector } from 'react-redux'
