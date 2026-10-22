@@ -36,6 +36,7 @@ const SearchWithAi = () => {
     recognition.onresult = async (e) => {
       const transcript = e.results[0][0].transcript.trim()
       setInput(transcript)
+      setListening(false)
       await handleRecommendation(transcript)
     }
   }
@@ -45,7 +46,7 @@ const SearchWithAi = () => {
     try {
       const result = await axios.post(serverUrl + '/api/course/search', { input: query }, { withCredentials: true })
       setRecommendations(result.data)
-      setListening(false)
+
       if (result.data.length > 0) {
         speak("These are the top courses I found for you")
       }
@@ -53,7 +54,7 @@ const SearchWithAi = () => {
         speak("No courses found")
       }
     } catch (error) {
-      setListening(false)
+
     }
   }
 
@@ -62,7 +63,7 @@ const SearchWithAi = () => {
 
       {/* search Container */}
       <div className='bg-white shadow-xl rounded-3xl p-6 sm:p-8 w-full max-w-2xl text-centr relative'>
-        <FaArrowLeftLong className='text-[black] w-[22px] h-[22px] cursor-pointer absolute ' onClick={()=>navigate('/')} />
+        <FaArrowLeftLong className='text-[black] w-[22px] h-[22px] cursor-pointer absolute ' onClick={() => navigate('/')} />
         <h1 className='text-2xl sm:text-3xl font-bold text-gray-600 mb-6 flex items-center justify-center gap-2'><img src={ai} alt="" className='w-8 h-8 sm:w-[30px] sm:h-[30px] ' /> Search with <span className='text-[#CB99C7] '>AI</span></h1>
         <div className='flex items-center bg-gray-700 rounded-full overflow-hidden shadow-lg relative w-full'>
           <input type="text" className='flex-grow px-4 py-3 bg-transparent text-white placeholder-gray-400 focus:outline-none text-sm sm:text-base' placeholder='What do you want to learn? (e.g. AI, MERN, Cloud...)' onChange={(e) => setInput(e.target.value)} value={input} />
