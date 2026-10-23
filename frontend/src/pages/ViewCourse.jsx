@@ -127,12 +127,12 @@ const ViewCourse = () => {
   }
 
   const calculateAvgReview = (reviews) => {
-      if(!reviews || reviews.length === 0){
-        return 0
-      }
+    if (!reviews || reviews.length === 0) {
+      return 0
+    }
 
-      const total = reviews.reduce((sum, review)=> sum + review.rating , 0 )
-      return (total / reviews.length).toFixed(1)
+    const total = reviews.reduce((sum, review) => sum + review.rating, 0)
+    return (total / reviews.length).toFixed(1)
   }
 
   const avgRating = calculateAvgReview(selectedCourse?.reviews)

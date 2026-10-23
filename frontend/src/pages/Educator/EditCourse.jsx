@@ -85,7 +85,7 @@ const EditCourse = () => {
           updateCourses.push(updateData)
         }
         dispatch(setCourseData(updateCourses))
-        
+
       }
       else {
         const filterCourses = courseData.filter(c => c._id !== courseId)
