@@ -8,7 +8,7 @@ const ReviewCard = ({ comment, rating, photoUrl, name, description, courseTitle 
 
       <div className='flex items-center mb-3 text-yellow-400 text-sm'>
         {
-          Array(5).fill(0).map((_,i) => (
+          Array(5).fill(0).map((_, i) => (
             <span key={1}>
               {i < rating ? <FaStar /> : <FaRegStar />}
             </span>
@@ -16,7 +16,7 @@ const ReviewCard = ({ comment, rating, photoUrl, name, description, courseTitle 
         }
 
       </div>
-      <p className='text-gray-700 text-sm '>Review For : 
+      <p className='text-gray-700 text-sm '>Review For :
         <span className='font-semibold'>{courseTitle} </span> </p>
       <p className='text-gray-700 text-sm mb-5'>Review : <span className='font-semibold'>{comment} </span>  </p>
       <div className='flex items-center gap-2'>
