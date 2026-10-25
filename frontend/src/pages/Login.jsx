@@ -55,7 +55,7 @@ const Login = () => {
       toast.success("Login successful.");
 
     } catch (error) {
-      toast.error(response.data.message);
+      toast.error(error?.response.data.message);
     }
   }
 
