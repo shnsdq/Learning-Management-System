@@ -39,7 +39,7 @@ const Signup = () => {
       toast.success("Signup successful.");
 
     } catch (error) {
-      toast.error(response.data.message);
+      toast.error(error?.response?.data?.message);
     }
   }
 
@@ -58,7 +58,7 @@ const Signup = () => {
       toast.success("Signup successful.");
 
     } catch (error) {
-      toast.error(response.data.message);
+      toast.error(error.response.data.message);
     }
   }
 
