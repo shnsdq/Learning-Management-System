@@ -2,6 +2,7 @@ import User from "../models/userModel.js"
 import validator from "validator"
 import bcrypt from "bcryptjs"
 import genToken from "../config/token.js"
+import sendMail from '../config/sendMail.js'
 
 export const signup = async (req, res) => {
     try {
@@ -137,9 +138,9 @@ export const resetPassword = async (req, res) => {
 export const googleAuth = async (req, res) => {
     try {
         const { name, email, role } = req.body
-        const user = await User.findOne({ email })
+        let user = await User.findOne({ email })
         if (!user) {
-            const newUser = await User.create({
+             user = await User.create({
                 name,
                 email,
                 role
