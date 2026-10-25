@@ -100,7 +100,7 @@ const ForgetPassword = () => {
             {/* step 3 */}
             {step == 3 && <div className='bg-white shadow-md rounded-xl p-8 max-w-md w-full'>
                 <h2 className='text-2xl font-bold mb-6 text-center text-gray-800'>Reset your password</h2>
-                <p className='text-sm text-gray-500text-center mb-6'>Please enter your new password below to regain access to your account</p>
+                <p className='text-sm text-gray-500 text-center mb-6'>Please enter your new password below to regain access to your account</p>
                 <form className='space-y-4' onSubmit={(e) => { e.preventDefault() }}>
                     <div>
                         <label htmlFor="password" className='block text-sm text-gray-700 font-medium'>New Password</label>
