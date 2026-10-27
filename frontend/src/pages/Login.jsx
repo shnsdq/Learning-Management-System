@@ -35,7 +35,7 @@ const Login = () => {
 
     } catch (error) {
       setLoading(false)
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message);
     }
   }
 
@@ -45,9 +45,9 @@ const Login = () => {
       let user = response.user;
       let name = user.displayName
       let email = user.email
-      let role = ""
+      //let role = ""
       const result = await axios.post(serverUrl + "/api/auth/googleauth", {
-        name, email, role
+        name, email
       }, { withCredentials: true });
 
       dispatch(setUserData(result.data)); // Update Redux store with user data
@@ -55,7 +55,7 @@ const Login = () => {
       toast.success("Login successful.");
 
     } catch (error) {
-      toast.error(error?.response.data.message);
+      toast.error(error?.response?.data?.message);
     }
   }
 
