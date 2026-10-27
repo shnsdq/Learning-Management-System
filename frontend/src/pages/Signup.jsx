@@ -43,7 +43,7 @@ const Signup = () => {
     }
   }
 
-  const googleSignUp = async () => {
+  const googleSignUp = async (role) => {
     try {
       const response = await signInWithPopup(auth, provider);
       let user = response.user;
@@ -58,7 +58,7 @@ const Signup = () => {
       toast.success("Signup successful.");
 
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message);
     }
   }
 
