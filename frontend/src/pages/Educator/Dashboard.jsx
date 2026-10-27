@@ -21,13 +21,13 @@ const Dashboard = () => {
             enrolled: course.enrolledStudents?.length || 0
         })) || [];
 
-        const totalEarning = creatorCourseData?.reduce((sum,course)=>{
+    const totalEarning = creatorCourseData?.reduce((sum, course) => {
 
-            const studentCount = course.enrolledStudents?.length || 0;
-            const courseRevenue = course.price ? course.price *  studentCount : 0
+        const studentCount = course.enrolledStudents?.length || 0;
+        const courseRevenue = course.price ? course.price * studentCount : 0
 
-            return sum + courseRevenue
-        },0) || 0
+        return sum + courseRevenue
+    }, 0) || 0
 
     return (
         <div className='flex min-h-screen bg-gray-100'>
