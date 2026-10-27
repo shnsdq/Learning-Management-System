@@ -140,6 +140,14 @@ export const googleAuth = async (req, res) => {
         const { name, email, role } = req.body
         let user = await User.findOne({ email })
         if (!user) {
+            
+            // Validate that a role was actually provided for new accounts
+            if (!role) {
+                return res.status(400).json({ 
+                    message: "Account not found. Please sign up first and select a role." 
+                });
+            }
+
              user = await User.create({
                 name,
                 email,
