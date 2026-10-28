@@ -9,29 +9,29 @@ import { serverUrl } from '../../App';
 import { setCreatorCourseData } from '../../redux/courseSlice';
 
 const Courses = () => {
-  
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const {userData} = useSelector(state => state.user)
+  const { userData } = useSelector(state => state.user)
   const { creatorCourseData } = useSelector(state => state.course)
 
-      useEffect(() => {
-          const creatorCourses = async () => {
-              try {
-                  const result = await axios.get(serverUrl + '/api/course/getcreator', {withCredentials:true} )
-                   dispatch(setCreatorCourseData(result.data))
-  
-              } catch (error) {
-                  toast.error(response.data.error.message)
-              }
-          }
-          creatorCourses()
-      },[userData])
+  useEffect(() => {
+    const creatorCourses = async () => {
+      try {
+        const result = await axios.get(serverUrl + '/api/course/getcreator', { withCredentials: true })
+        dispatch(setCreatorCourseData(result.data))
+
+      } catch (error) {
+        toast.error(response.data.error.message)
+      }
+    }
+    creatorCourses()
+  }, [userData])
 
   return (
     <div className='flex min-h-screen bg-gray-100'>
       <div className='w-[100%] min-h-screen p-4 sm:p-6 bg-gray-100 '>
-        <div className='flex flex-col sm:flex-row justify-between items-start sm:utems-center mb-6 gap-3'>
+        <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3'>
 
           <div className='flex items-center justify-center gap-3'>
             <FaArrowLeftLong className='w-[22px] h-[22px] cursor-pointer' onClick={() => navigate('/dashboard')} />
@@ -65,12 +65,12 @@ const Courses = () => {
                     {course?.thumbnail ? <img src={course?.thumbnail} alt="" className='w-25 h-14 object-cover rounded-md' /> : <img src={img} alt="" className='w-25 h-14 object-cover rounded-md' />}<span>{course?.title}</span>
                   </td>
 
-                 {course?.price ?  <td className='px-4 py-3'>{course?.price} </td>
-                  : <td className='px-4 py-3'>₹ NA</td>}
+                  {course?.price ? <td className='px-4 py-3'>{course?.price} </td>
+                    : <td className='px-4 py-3'>₹ NA</td>}
 
-                  <td className='px-4 py-3'><span className={`px-3 py-1 rounded-full text-xs ${course.isPublished ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"} `}>{course.isPublished ? "Published":"Draft"}</span> </td>
+                  <td className='px-4 py-3'><span className={`px-3 py-1 rounded-full text-xs ${course.isPublished ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"} `}>{course.isPublished ? "Published" : "Draft"}</span> </td>
                   <td className='px-4 py-3'>
-                    <FaEdit className='text-gray-600 hover:text-blue-600 cursor-pointer' onClick={()=>navigate(`/editcourse/${course?._id}`)}/>
+                    <FaEdit className='text-gray-600 hover:text-blue-600 cursor-pointer' onClick={() => navigate(`/editcourse/${course?._id}`)} />
                   </td>
                 </tr>
               ))}
@@ -84,18 +84,18 @@ const Courses = () => {
 
         {/* for small screen table */}
         <div className='md:hidden space-y-4'>
-         { creatorCourseData?.map((course, index) => (
-          <div key={index} className='bg-white rounded-lg shadow p-4 flex flex-col gap-3'>
-            <div className='flex ga-4 items-center'>
-            { course?.thumbnail ? <img src={course?.thumbnail} alt="" className='w-16 rounded-md object-cover' /> :  <img src={img} alt="" className='w-16 rounded-md object-cover' /> }
-              <div className='flex-1'>
-                <h2 className='font-medium text-sm'>{course?.title}</h2>
-               {course?.price ? <p className='text-gray-600 text-xs mt-1'>₹ {course?.price} </p> : <p className='text-gray-600 text-xs mt-1'>₹ NA</p> }
+          {creatorCourseData?.map((course, index) => (
+            <div key={index} className='bg-white rounded-lg shadow p-4 flex flex-col gap-3'>
+              <div className='flex ga-4 items-center'>
+                {course?.thumbnail ? <img src={course?.thumbnail} alt="" className='w-16 rounded-md object-cover' /> : <img src={img} alt="" className='w-16 rounded-md object-cover' />}
+                <div className='flex-1'>
+                  <h2 className='font-medium text-sm'>{course?.title}</h2>
+                  {course?.price ? <p className='text-gray-600 text-xs mt-1'>₹ {course?.price} </p> : <p className='text-gray-600 text-xs mt-1'>₹ NA</p>}
+                </div>
+                <FaEdit className='text-gray-600 hover:text-blue-600 cursor-pointer' onClick={() => navigate(`/editcourse/${course?._id}`)} />
               </div>
-              <FaEdit className='text-gray-600 hover:text-blue-600 cursor-pointer' onClick={()=>navigate(`/editcourse/${course?._id}`)}/>
+              <span className={`w-fit px-3 py-2 text-xs rounded-full ${course?.isPublished ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>{course?.isPublished ? "Published" : "Draft"}</span>
             </div>
-            <span className={`w-fit px-3 py-2 text-xs rounded-full ${course?.isPublished ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600" }`}>{course?.isPublished ? "Published":"Draft"}</span>
-          </div>
           ))}
 
           <p className='text-center text-sm text-gray-400 mt-4 '>A list of your recent courses</p>
