@@ -92,12 +92,12 @@ const EditCourse = () => {
         dispatch(setCourseData(filterCourses))
       }
       setLoading(false)
-      toast.success(result.data.message)
+      toast.success(result?.data?.message)
       navigate('/courses')
     } catch (error) {
       console.log(error)
       setLoading(false)
-      toast.error(error.response.data.message)
+      toast.error(error?.response?.data?.message)
     }
   }
 
