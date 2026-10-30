@@ -22,8 +22,8 @@ const EditLecture = () => {
 
     const formData = new FormData()
     formData.append("lectureTitle", lectureTitle),
-        formData.append("videoUrl", videoUrl),
-        formData.append("isPreviewFree", isPreviewFree)
+    formData.append("videoUrl", videoUrl),
+    formData.append("isPreviewFree", isPreviewFree)
 
 
     const handleEditLecture = async () => {
@@ -37,7 +37,7 @@ const EditLecture = () => {
             setLoading(false)
         } catch (error) {
             console.log(error)
-            toast.error(error.response.data.message)
+            toast.error(error?.response?.data?.message)
             setLoading(false)
         }
     }
@@ -45,15 +45,15 @@ const EditLecture = () => {
     const removeLecture = async () => {
         setLoading1(true)
         try {
-            const result = await axios.delete(serverUrl + `/api/course/removelecture/${lectureId}`,{withCredentials:true})
+            const result = await axios.delete(serverUrl + `/api/course/removelecture/${lectureId}`, { withCredentials: true })
             setLoading1(false)
-           navigate(`/createlecture/${courseId}`)
-           toast.success("Lecture Removed")
-           
+            navigate(`/createlecture/${courseId}`)
+            toast.success("Lecture Removed")
+
         } catch (error) {
             setLoading1(false)
-                toast.error(error.response.data.message)
-            
+            toast.error(error?.response?.data?.message)
+
         }
     }
 
