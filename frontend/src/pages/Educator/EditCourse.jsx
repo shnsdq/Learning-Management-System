@@ -78,14 +78,14 @@ const EditCourse = () => {
       const result = await axios.post(serverUrl + `/api/course/editcourse/${courseId}`, formData, { withCredentials: true })
 
       const updateData = result.data
+
       if (updateData.isPublished) {
-        const updateCourses = courseData.map(c => c._id === courseId ? updateData : c)
+        const courseExists = courseData.some(c => c._id === courseId)
+        const updateCourses = courseExists
+          ? courseData.map(c => c._id === courseId ? updateData : c)
+          : [...courseData, updateData]
 
-        if (!courseData.some(c => c._id === courseId)) {
-          updateCourses.push(updateData)
-        }
         dispatch(setCourseData(updateCourses))
-
       }
       else {
         const filterCourses = courseData.filter(c => c._id !== courseId)
@@ -94,6 +94,7 @@ const EditCourse = () => {
       setLoading(false)
       toast.success(result?.data?.message)
       navigate('/courses')
+
     } catch (error) {
       console.log(error)
       setLoading(false)
@@ -105,11 +106,13 @@ const EditCourse = () => {
     setLoading1(true)
     try {
       const result = await axios.delete(serverUrl + `/api/course/remove/${courseId}`, { withCredentials: true })
+
       const filterCourses = courseData.filter(c => c._id !== courseId)
       dispatch(setCourseData(filterCourses))
       setLoading1(false)
       toast.success(result.data.message)
       navigate('/courses')
+
     } catch (error) {
       console.log(error)
       setLoading1(false)
@@ -134,7 +137,8 @@ const EditCourse = () => {
       <div className='bg-gray-50 p-6 rounded-md'>
         <h2 className='text-lg font-medium mb-4'>Basic Course Information</h2>
         <div className='space-x-2 space-y-2'>
-          {!isPublished ? <button className='bg-green-100 text-green-600 px-4 py-2 rounded-md border-1' onClick={() => setIsPublished(prev => !prev)}>Click to Publish</button>
+          {!isPublished
+            ? <button className='bg-green-100 text-green-600 px-4 py-2 rounded-md border-1' onClick={() => setIsPublished(prev => !prev)}>Click to Publish</button>
             : <button className='bg-red-100 text-red-600 px-4 py-2 rounded-md border-1' onClick={() => setIsPublished(prev => !prev)}>Click to UnPublish</button>}
 
           <button className='bg-red-600 text-white px-4 py-2 rounded-md' onClick={handleRemoveCourse}>Remove Course</button>
@@ -200,7 +204,7 @@ const EditCourse = () => {
             <input type="file" hidden ref={thumb} accept='image/*' onChange={handleThumbnail} />
           </div>
 
-          <div className='relative w-[300px] h-[170px '>
+          <div className='relative w-[300px] h-[170px] '>
             <img src={frontendImage} alt="" className='w-[100%] h-[100%] border-1 border-black rounded-[5px]' onClick={() => thumb.current.click()} />
             <FaEdit className='w-[20px] h-[20px] absolute top-2 right-2 ' onClick={() => thumb.current.click()} />
           </div>
