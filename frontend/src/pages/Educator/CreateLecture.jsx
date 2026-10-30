@@ -21,10 +21,12 @@ const CreateLecture = () => {
         setLoading(true)
         try {
             const result = await axios.post(serverUrl + `/api/course/createlecture/${courseId}`, { lectureTitle }, { withCredentials: true })
+
             dispatch(setLectureData([...lectureData, result.data.lecture]))
             setLoading(false)
             toast.success("Lecture Added")
             setLectureTitle("")
+
         } catch (error) {
             setLoading(false)
             toast.error(error.response.data.message)
@@ -69,7 +71,7 @@ const CreateLecture = () => {
                         lectureData?.map((lecture, index) => (
                             <div key={index} className='bg-gray-100 rounded-md flex justify-between items-center p-3 text-sm font-medium text-gray-700'>
                                 <span>Lecture - {index + 1} : {lecture.lectureTitle} </span>
-                                <FaEdit className='text-gray-500 hover:text-gray-700 cursor-pointer' onClick={()=>navigate(`/editlecture/${courseId}/${lecture._id}`)}/>
+                                <FaEdit className='text-gray-500 hover:text-gray-700 cursor-pointer' onClick={() => navigate(`/editlecture/${courseId}/${lecture._id}`)} />
 
                             </div>
                         ))
