@@ -15,7 +15,12 @@ try {
     }
 
     const uploadResult = await cloudinary.uploader.upload(filePath,{resource_type:'auto'})
-    fs.unlinkSync(filePath)
+
+            // REMOVE the local file safely after successful upload
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
+
 
     return uploadResult.secure_url
 
