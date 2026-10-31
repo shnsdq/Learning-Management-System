@@ -30,7 +30,7 @@ const EditLecture = () => {
         setLoading(true)
         try {
             const result = await axios.post(serverUrl + `/api/course/editlecture/${lectureId}`, formData, { withCredentials: true })
-            console.log(result.data)
+            
             dispatch(setLectureData([...lectureData, result.data]))
             toast.success("Lecture Updated")
             navigate("/courses")
