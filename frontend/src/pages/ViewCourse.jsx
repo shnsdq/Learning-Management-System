@@ -120,7 +120,7 @@ const ViewCourse = () => {
 
     } catch (error) {
       setLoading(false)
-      toast.error(error.response.data.message)
+      toast.error(error?.response?.data?.message)
       setRating(0)
       setComment("")
     }
@@ -172,7 +172,8 @@ const ViewCourse = () => {
                 <li>✅ 10+ hours of video content </li>
                 <li>✅ Lifetime across to course materials</li>
               </ul>
-              {!isEnrolled ? <button className='bg-[black] text-white px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={() => handleEnroll(userData._id, courseId)}>Enroll Now</button>
+              {!isEnrolled
+                ? <button className='bg-[black] text-white px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={() => handleEnroll(userData._id, courseId)}>Enroll Now</button>
                 : <button className='bg-green-100 text-green-500 px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={() => navigate(`/viewlecture/${courseId}`)}>Watch Now</button>}
 
             </div>
