@@ -38,7 +38,6 @@ const ViewCourse = () => {
   }
 
   useEffect(() => {
-
     const handleCreator = async () => {
       if (selectedCourse?.creator) {
         try {
@@ -98,7 +97,7 @@ const ViewCourse = () => {
             setIsEnrolled(true)
             toast.success(verifyPayment.data.message)
           } catch (error) {
-            toast.error(error.response.data.message)
+            toast.error(error?.response?.data?.message)
           }
         }
       }
