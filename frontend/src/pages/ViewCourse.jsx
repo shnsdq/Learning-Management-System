@@ -29,12 +29,11 @@ const ViewCourse = () => {
   const [loading, setLoading] = useState(false)
 
   const fetchCourseData = async () => {
-    courseData.map((course) => {
-      if (course._id === courseId) {
-        dispatch(setSelectedCourse(course))
-        return null
-      }
-    })
+    if (!courseData) return;
+    const matchedCourse = courseData.find((course) => course._id === courseId)
+    if (matchedCourse) {
+      dispatch(setSelectedCourse(matchedCourse))
+    }
   }
 
   useEffect(() => {
@@ -54,10 +53,9 @@ const ViewCourse = () => {
   }, [selectedCourse])
 
   const checkEnrollment = () => {
-    const verify = userData?.enrolledCourses?.some(c => (typeOf(c) === 'string' ? c : c._id).toString() === courseId?.toString())
-    if (verify) {
-      setIsEnrolled(true)
-    }
+    const verify = userData?.enrolledCourses?.some(c => (typeof c === 'string' ? c : c?._id).toString() === courseId?.toString())
+
+    setIsEnrolled(!!verify)
   }
 
   useEffect(() => {
@@ -71,7 +69,7 @@ const ViewCourse = () => {
       setCreatorCourses(creatorCourse)
     }
 
-  }, [creatorData, courseData])
+  }, [creatorData, courseData, courseId])
 
   const handleEnroll = async (userId, courseId) => {
     try {
@@ -172,7 +170,7 @@ const ViewCourse = () => {
                 <li>✅ Lifetime across to course materials</li>
               </ul>
               {!isEnrolled
-                ? <button className='bg-[black] text-white px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={() => handleEnroll(userData._id, courseId)}>Enroll Now</button>
+                ? <button className='bg-[black] text-white px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={() => handleEnroll(userData?._id, courseId)}>Enroll Now</button>
                 : <button className='bg-green-100 text-green-500 px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={() => navigate(`/viewlecture/${courseId}`)}>Watch Now</button>}
 
             </div>
@@ -197,7 +195,7 @@ const ViewCourse = () => {
 
         <div className='flex flex-col md:flex-row gap-6'>
 
-          <div className='bg-white w-full md:w-2/5 p-6 rounded-2xl shaodow-lg border border-gray-300'>
+          <div className='bg-white w-full md:w-2/5 p-6 rounded-2xl shadow-lg border border-gray-300'>
             <h2 className='text-xl font-bold mb-1 text-gray-800'>Course Curriculum</h2>
             <p className='text-sm text-gray-500 mb-4'>
               {selectedCourse?.lectures?.length} Lectures
@@ -213,7 +211,7 @@ const ViewCourse = () => {
                       setSelectedLecture(lecture)
                     }
                   }}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200 text-left ${lecture.isPreviewFree ? "hover:bg-gray-100 cursor-pointer border-gray-300" : "coursor-not-allowed opacity-60 border-gray-200"} ${selectedLecture?.lectureTitle === lecture?.lectureTitle ? "bg-gray-100 border-gray-400" : ""}`}>
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200 text-left ${lecture.isPreviewFree ? "hover:bg-gray-100 cursor-pointer border-gray-300" : "cursor-not-allowed opacity-60 border-gray-200"} ${selectedLecture?.lectureTitle === lecture?.lectureTitle ? "bg-gray-100 border-gray-400" : ""}`}>
                   <span className='text-lg text-gray-700'>
                     {lecture.isPreviewFree ? <FaPlayCircle /> : <FaLock />}
                   </span>
@@ -247,7 +245,7 @@ const ViewCourse = () => {
                 [1, 2, 3, 4, 5].map((star) => (
                   <FaStar key={star}
                     onClick={() => setRating(star)}
-                    className={star <= rating ? "fill-amber-300" : "fill-gray-300"} />
+                    className={`cursor-pointer ${star <= rating ? "fill-amber-300" : "fill-gray-300"}`} />
                 ))
               }
             </div>
@@ -260,7 +258,7 @@ const ViewCourse = () => {
         </div>
         {/* for creator info */}
         <div className='flex items-center gap-4 pt-4 border-t'>
-          {creatorData?.photoUrl ? <img src={creatorData?.photoUrl} alt="" className=' border-1 border-gray-400 w-16 h-16 rounded-full object-cover' /> : <img src={img} alt="" className=' border-1 border-gray-400 w-16 h-16 rounded-full object-cover' />
+          {creatorData?.photoUrl ? <img src={creatorData?.photoUrl} alt="" className=' border border-gray-400 w-16 h-16 rounded-full object-cover' /> : <img src={img} alt="" className=' border border-gray-400 w-16 h-16 rounded-full object-cover' />
           }
           <div>
             <h2 className='text-lg font-semibold'>{creatorData?.name} </h2>
