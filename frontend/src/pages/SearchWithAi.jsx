@@ -62,7 +62,7 @@ const SearchWithAi = () => {
     <div className='min-h-screen bg-gradient-to-br from-black to-gray-900 text-white flex flex-col items-center px-4 py-1'>
 
       {/* search Container */}
-      <div className='bg-white shadow-xl rounded-3xl p-6 sm:p-8 w-full max-w-2xl text-centr relative'>
+      <div className='bg-white shadow-xl rounded-3xl p-6 sm:p-8 w-full max-w-2xl text-center relative'>
         <FaArrowLeftLong className='text-[black] w-[22px] h-[22px] cursor-pointer absolute ' onClick={() => navigate('/')} />
         <h1 className='text-2xl sm:text-3xl font-bold text-gray-600 mb-6 flex items-center justify-center gap-2'><img src={ai} alt="" className='w-8 h-8 sm:w-[30px] sm:h-[30px] ' /> Search with <span className='text-[#CB99C7] '>AI</span></h1>
         <div className='flex items-center bg-gray-700 rounded-full overflow-hidden shadow-lg relative w-full'>
@@ -76,27 +76,29 @@ const SearchWithAi = () => {
         </div>
       </div>
 
-      {recommendations.length > 0 ? (
-        <div className='w-full max-w-6xl mt-12 px-2 sm:px-4'>
-          <h1 className='text-center text-xl sm:text-2xl mt-10 text-gray-400'>AI Search Results</h1>
+      {recommendations.length > 0
+        ? (
+          <div className='w-full max-w-6xl mt-12 px-2 sm:px-4'>
+            <h1 className='text-center text-xl sm:text-2xl mt-10 text-gray-400'>AI Search Results</h1>
 
-          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8'>
-            {
-              recommendations?.map((course, index) => (
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8'>
+              {
+                recommendations?.map((course, index) => (
 
-                <div key={index} className='bg-white text-black p-5 rounded-2xl shadow-md hover:shadow-indigo-500/30 transition-all duration-200 boorder border-gray-200 cursor-pointer hover:bg-gray-200' onClick={() => navigate('/viewcourse/${course._id')}>
-                  <h2 className='text-lg font-bold sm:text-xl'>{course.title} </h2>
-                  <p className='text-sm text-gray-600 mt-1 '>{course.category} </p>
-                </div>
-              ))
-            }
+                  <div key={index} className='bg-white text-black p-5 rounded-2xl shadow-md hover:shadow-indigo-500/30 transition-all duration-200 boorder border-gray-200 cursor-pointer hover:bg-gray-200' onClick={() => navigate('/viewcourse/${course._id}')}>
+                    <h2 className='text-lg font-bold sm:text-xl'>{course.title} </h2>
+                    <p className='text-sm text-gray-600 mt-1 '>{course.category} </p>
+                  </div>
+                ))
+              }
+
+            </div>
 
           </div>
+        )
+        : (listening ? <h1 className='text-center text-xl sm:text-2xl mt-10 text-gray-400'>Listening...</h1> : <h1 className='text-center text-xl sm:text-2xl mt-10 text-gray-400'>No Courses Found Yet</h1>
 
-        </div>
-      ) : (listening ? <h1 className='text-center text-xl sm:text-2xl mt-10 text-gray-400'>Listening...</h1> : <h1 className='text-center text-xl sm:text-2xl mt-10 text-gray-400'>No Courses Found Yet</h1>
-
-      )}
+        )}
 
     </div>
   )
