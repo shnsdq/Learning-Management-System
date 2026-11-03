@@ -69,7 +69,7 @@ const ViewLectures = () => {
 
                         ? (selectedCourse?.lectures?.map((lecture, index) => (
 
-                            <button key={index} onClick={() => setSelectedLecture(lecture)} className={`flex items-center justify-between p-3 rounded-lg border transition text-left ${selectedLecture?._id === lecture._id ? 'bg-gray-200 border-gray-500' : 'hover:bg-gray-50 border-gray-300'}`} ><h2 className='text-sm font-semibold text-gray-800'> {lecture.lectureTitle}</h2> <FaPlayCircle className='text-lg text-black' />
+                            <button key={index} className={`flex items-center justify-between p-3 rounded-lg border transition text-left ${selectedLecture?._id === lecture._id ? 'bg-gray-200 border-gray-500' : 'hover:bg-gray-50 border-gray-300'}`} onClick={() => setSelectedLecture(lecture)} ><h2 className='text-sm font-semibold text-gray-800'> {lecture.lectureTitle}</h2> <FaPlayCircle className='text-lg text-black' />
                             </button>
                         )))
                         : (<p>No lectures available</p>)}
