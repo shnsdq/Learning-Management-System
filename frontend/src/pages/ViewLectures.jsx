@@ -1,10 +1,11 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { serverUrl } from '../App'
 import { FaArrowLeftLong } from 'react-icons/fa6'
 import { FaPlayCircle } from "react-icons/fa";
+import { setCourseData } from '../redux/courseSlice'
 
 const ViewLectures = () => {
     const { courseId } = useParams()
@@ -14,6 +15,37 @@ const ViewLectures = () => {
     const [creatorData, setCreatorData] = useState(null)
     const [selectedLecture, setSelectedLecture] = useState(selectedCourse?.lectures?.[0] || null)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+
+    // Automatically fetch fresh courses when the component mounts
+    useEffect(() => {
+        const fetchFreshCourses = async () => {
+            try {
+                const result = await axios.get(serverUrl + "/api/course/getpublished", { withCredentials: true })
+                dispatch(setCourseData(result.data))
+            } catch (error) {
+                console.log("Error updating course data:", error)
+            }
+        }
+        fetchFreshCourses()
+    }, [dispatch])
+
+    //Keep the video player and selected lecture updated when fresh data arrives
+    useEffect(() => {
+        if (selectedCourse?.lectures?.length > 0) {
+            // Set the first lecture if nothing is selected yet, or keep the currently selected one
+            if (!selectedLecture) {
+                setSelectedLecture(selectedCourse.lectures[0])
+            } else {
+                // If a new lecture was added, make sure it syncs up in the state
+                const currentStillExists = selectedCourse.lectures.find(l => l._id === selectedLecture._id)
+                if (!currentStillExists) {
+                    setSelectedLecture(selectedCourse.lectures[0])
+                }
+            }
+        }
+    }, [selectedCourse, selectedLecture])
 
     useEffect(() => {
 
