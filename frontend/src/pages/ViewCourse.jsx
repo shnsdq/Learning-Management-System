@@ -12,6 +12,7 @@ import axios from 'axios'
 import Card from '../component/Card'
 import { toast } from 'react-toastify'
 import { ClipLoader } from 'react-spinners'
+import { setUserData } from '../redux/userSlice'
 
 const ViewCourse = () => {
 
@@ -27,6 +28,20 @@ const ViewCourse = () => {
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState("")
   const [loading, setLoading] = useState(false)
+
+  // Fetch fresh user data every time the component loads or courseId changes
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await axios.get(serverUrl + "/api/user/getcurrentuser", { withCredentials: true });
+        // This ensures Redux is always up-to-date when navigating back to this page
+        dispatch(setUserData(response.data || response.data.user)) 
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      }
+    };
+    fetchCurrentUser();
+  }, [courseId, dispatch]) // Runs when landing or returning to this page
 
   const fetchCourseData = async () => {
     if (!courseData) return;
@@ -94,6 +109,11 @@ const ViewCourse = () => {
               { withCredentials: true })
             setIsEnrolled(true)
             toast.success(verifyPayment.data.message)
+
+             // Immediately refresh user profile in Redux right after successful payment verification
+            const userUpdate = await axios.get(serverUrl + "/api/user/getcurrentuser", { withCredentials: true });
+            dispatch(setUserData(userUpdate.data || userUpdate.data.user))
+
           } catch (error) {
             toast.error(error?.response?.data?.message)
           }
@@ -101,6 +121,7 @@ const ViewCourse = () => {
       }
       const rzp = new window.Razorpay(options)
       rzp.open()
+
     } catch (error) {
       toast.error("Something went wrong while enrolling.")
     }
