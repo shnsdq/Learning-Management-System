@@ -50,7 +50,8 @@ const ViewLectures = () => {
 
                 {/* video player */}
                 <div className='aspect-video bg-black rounded-xl overflow-hidden mb-4 border border-gray-300'>
-                    {selectedLecture?.videoUrl ? <video className='w-full h-full object-cover' src={selectedLecture?.videoUrl} controls />
+                    {selectedLecture?.videoUrl
+                        ? <video className='w-full h-full object-cover' src={selectedLecture?.videoUrl} controls />
                         : <div className='flex items-center justify-center h-full text-white'>Select a lecture to start watching</div>}
 
                 </div>
@@ -67,7 +68,9 @@ const ViewLectures = () => {
                     {selectedCourse?.lectures?.length > 0
 
                         ? (selectedCourse?.lectures?.map((lecture, index) => (
-                            <button key={index} onClick={() => selectedLecture(lecture)} className={`flex items-center justify-between p-3 rounded-lg border transition text-left ${selectedLecture?._id === lecture._id ? 'bg-gray-200 border-gray-500' : 'hover:bg-gray-50 border-gray-300'}`} ><h2 className='text-sm font-semibold text-gray-800'> {lecture.lectureTitle}</h2> <FaPlayCircle className='text-lg text-black' /> </button>
+
+                            <button key={index} onClick={() => setSelectedLecture(lecture)} className={`flex items-center justify-between p-3 rounded-lg border transition text-left ${selectedLecture?._id === lecture._id ? 'bg-gray-200 border-gray-500' : 'hover:bg-gray-50 border-gray-300'}`} ><h2 className='text-sm font-semibold text-gray-800'> {lecture.lectureTitle}</h2> <FaPlayCircle className='text-lg text-black' />
+                            </button>
                         )))
                         : (<p>No lectures available</p>)}
                 </div>
