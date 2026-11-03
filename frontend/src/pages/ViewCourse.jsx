@@ -215,7 +215,8 @@ const ViewCourse = () => {
                   <span className='text-lg text-gray-700'>
                     {lecture.isPreviewFree ? <FaPlayCircle /> : <FaLock />}
                   </span>
-                  <span className='text-sm font-medium text-gray-800'>{lecture?.lectureTitle} </span></button>
+                  <span className='text-sm font-medium text-gray-800'>{lecture?.lectureTitle} </span>
+                </button>
               ))}
             </div>
           </div>
