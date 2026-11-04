@@ -77,22 +77,23 @@ const EditCourse = () => {
     try {
       const result = await axios.post(serverUrl + `/api/course/editcourse/${courseId}`, formData, { withCredentials: true })
 
-      const updateData = result.data
+      const updateData = result.data.course
 
- // Ensure we are working with an array structure safely
-    const currentCourseData = Array.isArray(courseData) ? courseData : [];
+      //Ensure we are working with an array structure safely
+      const currentCourseData = Array.isArray(courseData) ? courseData : [];
 
-    if (updateData.isPublished) {
-      const courseExists = currentCourseData.some(c => c._id === courseId)
-      const updateCourses = courseExists
-        ? currentCourseData.map(c => c._id === courseId ? updateData : c)
-        : [...currentCourseData, updateData]
+      if (updateData.isPublished) {
+        const courseExists = currentCourseData.some(c => c._id === courseId)
+        const updateCourses = courseExists
+          ? currentCourseData.map(c => c._id === courseId ? updateData : c)
+          : [...currentCourseData, updateData]
 
-      dispatch(setCourseData(updateCourses))
-    } else {
-      const filterCourses = currentCourseData.filter(c => c._id !== courseId)
-      dispatch(setCourseData(filterCourses))
-    }
+        dispatch(setCourseData(updateCourses))
+      } else {
+        const filterCourses = currentCourseData.filter(c => c._id !== courseId)
+        dispatch(setCourseData(filterCourses))
+      }
+
       setLoading(false)
       toast.success(result?.data?.message)
       navigate('/courses')
@@ -174,7 +175,7 @@ const EditCourse = () => {
                 <option value="Ethical Hacking">Ethical Hacking</option>
                 <option value="UI UX Designing">UI UX Designing</option>
                 <option value="Web Development">Web Development</option>
-                <option value="others">others</option>
+                <option value="Others">Others</option>
 
               </select>
 
