@@ -33,7 +33,7 @@ const Signup = () => {
         role
       }, { withCredentials: true });
 
-      dispatch(setUserData(result.data)); // Update Redux store with user data
+      dispatch(setUserData(result.data.user)); // Update Redux store with user data
       setLoading(false)
       navigate('/')
       toast.success("Signup successful.");
@@ -53,7 +53,7 @@ const Signup = () => {
         name, email, role
       }, { withCredentials: true });
 
-      dispatch(setUserData(result.data)); // Update Redux store with user data
+      dispatch(setUserData(result.data.user)); // Update Redux store with user data
       navigate('/')
       toast.success("Signup successful.");
 
