@@ -32,7 +32,13 @@ export const signup = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        return res.status(201).json({ message: "User created successfully", user })
+        const safeUser = await User.findById(user._id)
+            .select('-password')
+            .populate("enrolledCourses") //currentUser controller is populating enrolledCourses also so the data should be in sync across app
+
+        return res.status(200).json({ message: "SignUp successful", user: safeUser })
+
+        //return res.status(201).json({ message: "User created successfully", user })
     } catch (error) {
         return res.status(500).json({ message: `Internal server ${error}` })
     }
@@ -57,7 +63,13 @@ export const login = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        return res.status(200).json({ message: "Login successful", user })
+        const safeUser = await User.findById(user._id)
+            .select('-password')
+            .populate("enrolledCourses")
+
+        return res.status(200).json({ message: "Login successful", user: safeUser })
+
+        //return res.status(200).json({ message: "Login successful", user })
     } catch (error) {
         return res.status(500).json({ message: `Login error ${error}` })
     }
@@ -140,15 +152,15 @@ export const googleAuth = async (req, res) => {
         const { name, email, role } = req.body
         let user = await User.findOne({ email })
         if (!user) {
-            
+
             // Validate that a role was actually provided for new accounts
             if (!role) {
-                return res.status(400).json({ 
-                    message: "Account not found. Please sign up first and select a role." 
+                return res.status(400).json({
+                    message: "Account not found. Please sign up first and select a role."
                 });
             }
 
-             user = await User.create({
+            user = await User.create({
                 name,
                 email,
                 role
@@ -161,7 +173,12 @@ export const googleAuth = async (req, res) => {
             sameSite: "none",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
-        return res.status(200).json(user)
+        const safeUser = await User.findById(user._id)
+            .select('-password')
+            .populate("enrolledCourses")
+
+        return res.status(200).json({ message: "Login successful", user: safeUser })
+        // return res.status(200).json(user)
     } catch (error) {
         return res.status(500).json({ message: `Internal server ${error}` })
     }
