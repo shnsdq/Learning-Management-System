@@ -23,7 +23,7 @@ const ViewLectures = () => {
     useEffect(() => {
         if (!userData || !selectedCourse) return
         if (!isCreator && !isEnrolled) 
-            navigate(`/viewcourse/${courseId}`,, { replace: true })
+            navigate(`/viewcourse/${courseId}`, { replace: true })
     }, [userData, selectedCourse, isCreator, isEnrolled])
 
     // Automatically fetch fresh courses when the component mounts
