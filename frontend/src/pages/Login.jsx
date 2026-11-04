@@ -28,7 +28,7 @@ const Login = () => {
     try {
       const result = await axios.post(serverUrl + "/api/auth/login", { email, password }, { withCredentials: true });
 
-      dispatch(setUserData(result.data));
+      dispatch(setUserData(result.data.user));
       setLoading(false)
       toast.success("Login successful.");
       navigate('/')
@@ -50,7 +50,7 @@ const Login = () => {
         name, email
       }, { withCredentials: true });
 
-      dispatch(setUserData(result.data)); // Update Redux store with user data
+      dispatch(setUserData(result.data.user)); // Update Redux store with user data
       navigate('/')
       toast.success("Login successful.");
 
