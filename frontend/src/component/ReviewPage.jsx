@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import ReviewCard from './ReviewCard'
+import getAllReviews from '../customHooks/getAllReviews'
 
 const ReviewPage = () => {
+  getAllReviews()
   const { reviewData } = useSelector(state => state.review)
   const [latestReview, setLatestReview] = useState(null)
 
