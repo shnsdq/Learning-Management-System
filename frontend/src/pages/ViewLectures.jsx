@@ -17,6 +17,14 @@ const ViewLectures = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
+    const isCreator = String(selectedCourse?.creator?._id || selectedCourse?.creator) === String(userData?._id)
+    const isEnrolled = userData?.enrolledCourses?.some(c => String(c?._id || c) === String(courseId))
+
+    useEffect(() => {
+        if (!userData || !selectedCourse) return
+        if (!isCreator && !isEnrolled) 
+            navigate(`/viewcourse/${courseId}`,, { replace: true })
+    }, [userData, selectedCourse, isCreator, isEnrolled])
 
     // Automatically fetch fresh courses when the component mounts
     useEffect(() => {
@@ -63,6 +71,8 @@ const ViewLectures = () => {
 
         handleCreator()
     }, [selectedCourse])
+
+    if (!userData || !selectedCourse || (!isCreator && !isEnrolled)) return null
 
     return (
         <div className='min-h-screen bg-gray-50 p-6 flex flex-col md:flex-row gap-6'>
