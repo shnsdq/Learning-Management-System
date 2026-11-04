@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { FaArrowLeftLong } from 'react-icons/fa6'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { setSelectedCourse } from '../redux/courseSlice'
+import { setCourseData, setSelectedCourse } from '../redux/courseSlice'
 import img from '../assets/empty.jpg'
 import { FaStar } from "react-icons/fa";
 import { FaPlayCircle } from "react-icons/fa";
@@ -35,7 +35,7 @@ const ViewCourse = () => {
       try {
         const response = await axios.get(serverUrl + "/api/user/getcurrentuser", { withCredentials: true });
         // This ensures Redux is always up-to-date when navigating back to this page
-        dispatch(setUserData(response.data || response.data.user)) 
+        dispatch(setUserData(response.data || response.data.user))
       } catch (error) {
         console.error('Error fetching current user:', error);
       }
@@ -110,7 +110,7 @@ const ViewCourse = () => {
             setIsEnrolled(true)
             toast.success(verifyPayment.data.message)
 
-             // Immediately refresh user profile in Redux right after successful payment verification
+            // Immediately refresh user profile in Redux right after successful payment verification
             const userUpdate = await axios.get(serverUrl + "/api/user/getcurrentuser", { withCredentials: true });
             dispatch(setUserData(userUpdate.data || userUpdate.data.user))
 
@@ -131,6 +131,10 @@ const ViewCourse = () => {
     setLoading(true)
     try {
       const result = await axios.post(serverUrl + '/api/review/createreview', { rating, comment, courseId }, { withCredentials: true })
+
+      const fresh = await axios.get(serverUrl + "/api/course/getpublished", { withCredentials: true })
+      dispatch(setCourseData(fresh.data)) //avgRating func needs this updated courseData
+
       setLoading(false)
       toast.success("Review Added")
       setRating(0)
@@ -139,10 +143,13 @@ const ViewCourse = () => {
     } catch (error) {
       setLoading(false)
       toast.error(error?.response?.data?.message)
-      setRating(0)
-      setComment("")
+      
     }
   }
+
+  const isCreator =
+    !!userData?._id &&
+    String(selectedCourse?.creator?._id || selectedCourse?.creator) === String(userData._id)
 
   const calculateAvgReview = (reviews) => {
     if (!reviews || reviews.length === 0) {
@@ -178,7 +185,7 @@ const ViewCourse = () => {
             <div className='flex items-start flex-col justify-between'>
               <div className='text-yellow-500 font-medium flex gap-2'>
                 <span className='flex items-center justify-start gap-1'><FaStar />{avgRating} </span>
-                <span className='text-gray-400'>(1,200 Reviews) </span>
+                <span className='text-gray-400'>({selectedCourse?.reviews?.length || 0} Reviews) </span>
               </div>
 
               <div >
@@ -190,7 +197,8 @@ const ViewCourse = () => {
                 <li>✅ 10+ hours of video content </li>
                 <li>✅ Lifetime across to course materials</li>
               </ul>
-              {!isEnrolled
+              {!isEnrolled && !isCreator
+
                 ? <button className='bg-[black] text-white px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={() => handleEnroll(userData?._id, courseId)}>Enroll Now</button>
                 : <button className='bg-green-100 text-green-500 px-6 py-2 rounded hover:bg-gray-700 mt-3 cursor-pointer ' onClick={() => navigate(`/viewlecture/${courseId}`)}>Watch Now</button>}
 
@@ -257,27 +265,29 @@ const ViewCourse = () => {
         </div>
 
         {/* reviews */}
-        <div className='mt-8 border-t pt-6'>
-          <h2 className='text-xl font-semibold mb-2'>
-            Write a Review
-          </h2>
-          <div className='mb-4'>
-            <div className='flex gap-1 mb-2'>
-              {
-                [1, 2, 3, 4, 5].map((star) => (
-                  <FaStar key={star}
-                    onClick={() => setRating(star)}
-                    className={`cursor-pointer ${star <= rating ? "fill-amber-300" : "fill-gray-300"}`} />
-                ))
-              }
-            </div>
-            <textarea onChange={(e) => setComment(e.target.value)} value={comment} className='w-full border border-gray-300 rounded-lg p-2' placeholder='Write your review here...' rows={3} />
+        {!isCreator && (
+          <div className='mt-8 border-t pt-6'>
+            <h2 className='text-xl font-semibold mb-2'>
+              Write a Review
+            </h2>
+            <div className='mb-4'>
+              <div className='flex gap-1 mb-2'>
+                {
+                  [1, 2, 3, 4, 5].map((star) => (
+                    <FaStar key={star}
+                      onClick={() => setRating(star)}
+                      className={`cursor-pointer ${star <= rating ? "fill-amber-300" : "fill-gray-300"}`} />
+                  ))
+                }
+              </div>
+              <textarea onChange={(e) => setComment(e.target.value)} value={comment} className='w-full border border-gray-300 rounded-lg p-2' placeholder='Write your review here...' rows={3} />
 
-            <button className='bg-black text-white mt-3 px-4 py-2 rounded hover:bg-gray-800' disabled={loading} onClick={handleReview}> {loading ? <ClipLoader size={30} color='white' /> : "Submit Review "}</button>
+              <button className='bg-black text-white mt-3 px-4 py-2 rounded hover:bg-gray-800' disabled={loading} onClick={handleReview}> {loading ? <ClipLoader size={30} color='white' /> : "Submit Review "}</button>
+
+            </div>
 
           </div>
-
-        </div>
+        )}
         {/* for creator info */}
         <div className='flex items-center gap-4 pt-4 border-t'>
           {creatorData?.photoUrl ? <img src={creatorData?.photoUrl} alt="" className=' border border-gray-400 w-16 h-16 rounded-full object-cover' /> : <img src={img} alt="" className=' border border-gray-400 w-16 h-16 rounded-full object-cover' />
