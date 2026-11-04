@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Card from './Card'
+import getPublishedCourse from '../customHooks/getPublishedCourse'
 
 const CardPage = () => {
+  getPublishedCourse()
   const { courseData } = useSelector(state => state.course)
   const [popularCourses, setPopularCourses] = useState([])
 
