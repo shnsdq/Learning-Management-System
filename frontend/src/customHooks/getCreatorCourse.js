@@ -17,7 +17,7 @@ const getCreatorCourse = () => {
                  dispatch(setCreatorCourseData(result.data))
 
             } catch (error) {
-                toast.error(response.data.error.message)
+                toast.error(error.response.data.message)
             }
         }
         creatorCourses()
