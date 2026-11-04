@@ -79,18 +79,20 @@ const EditCourse = () => {
 
       const updateData = result.data
 
-      if (updateData.isPublished) {
-        const courseExists = courseData.some(c => c._id === courseId)
-        const updateCourses = courseExists
-          ? courseData.map(c => c._id === courseId ? updateData : c)
-          : [...courseData, updateData]
+ // Ensure we are working with an array structure safely
+    const currentCourseData = Array.isArray(courseData) ? courseData : [];
 
-        dispatch(setCourseData(updateCourses))
-      }
-      else {
-        const filterCourses = courseData.filter(c => c._id !== courseId)
-        dispatch(setCourseData(filterCourses))
-      }
+    if (updateData.isPublished) {
+      const courseExists = currentCourseData.some(c => c._id === courseId)
+      const updateCourses = courseExists
+        ? currentCourseData.map(c => c._id === courseId ? updateData : c)
+        : [...currentCourseData, updateData]
+
+      dispatch(setCourseData(updateCourses))
+    } else {
+      const filterCourses = currentCourseData.filter(c => c._id !== courseId)
+      dispatch(setCourseData(filterCourses))
+    }
       setLoading(false)
       toast.success(result?.data?.message)
       navigate('/courses')
