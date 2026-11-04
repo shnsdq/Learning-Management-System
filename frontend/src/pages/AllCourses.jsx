@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom'
 import ai from '../assets/SearchAi.png'
 import { useSelector } from 'react-redux'
 import Card from '../component/Card'
+import getPublishedCourse from '../customHooks/getPublishedCourse'
 
 const AllCourses = () => {
+    getPublishedCourse()
     const navigate = useNavigate()
     const { courseData } = useSelector(state => state.course)
     const [category, setCategory] = useState([])
