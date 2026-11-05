@@ -51,12 +51,12 @@ export const searchWithAi = async (req, res) => {
             try {
                 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
                 const response = await ai.models.generateContent({
-                    model: "gemini-2.5-flash",
+                    model: "gemini-3.8-flash",
                     contents: buildPrompt(query),
                 })
                 const keyword = response.text?.trim().replace(/^[-\s]+|[.\s]+$/g, '')
                 if (keyword) courses = await findCourses(keyword)
-                    
+
             } catch (aiError) {
                 console.log("AI keyword step failed:", aiError)
             }
