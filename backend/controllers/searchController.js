@@ -4,70 +4,65 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 
+const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+const findCourses = (term) => {
+    const safe = escapeRegex(term)
+    const rx = { $regex: safe, $options: 'i' }
+    return Course.find({
+        isPublished: true,
+        $or: [{ title: rx }, { subTitle: rx }, { description: rx }, { category: rx }, { level: rx }]
+    })
+}
+
+const buildPrompt = (query) => `You are an intelligent assistant for an LMS platform. A user will type any query about what they want to learn. Your task is to understand the intent and return one **most relevant keyword** from the following list of course categories and levels:
+
+- App Development
+- AI/ML
+- AI Tools
+- Data Science
+- Data Analytics
+- Ethical Hacking
+- UI UX Designing
+- Web Development
+- Others
+- Beginner
+- Intermediate
+- Advanced
+
+Only reply with one single keyword from the list above that best matches the query. Do not explain anything. No extra text.
+
+Query: ${query}
+`
+
 export const searchWithAi = async (req, res) => {
     try {
         const { input } = req.body
-        if (!input) {
+        if (!input?.trim()) {
             return res.status(400).json({ message: "Search query is required" })
         }
+        const query = input.trim()
 
-        const ai = new GoogleGenAI({
-            apiKey: process.env.GEMINI_API_KEY
-        });
+        // 1. plain search first: fast, no AI cost
+        let courses = await findCourses(query)
 
-        const prompt = `You are an intelligent assistant for an LMS platform.A user will type any query about what they want to learn.Your task is to understand the intent and return one **most relevant keyword** from the following list of course categories and levels:
-        
-        -App Development
-        -AI/ML
-        - AI Tools
-        -Data Science
-        -Data Analytics
-        Ehical Hacking
-        - UI UX Designing
-        - Web Development
-        - Others
-        - Beginner
-        - Intermediate
-        - Advanced
-
-        Only reply with one single keyword from the list above that best matches the query.Do not explain anything.No extra text.
-
-        Query: ${input}
-        `
-
-        const interaction = await ai.interactions.create({
-            model: "gemini-4-argon",
-            input: prompt,
-        });
-
-        const keyword = interaction.text
-        const courses = await Course.find({
-            isPublished: true,
-            $or: [
-                { title: { $regex: input, $options: 'i' } },
-                { subTitle: { $regex: input, $options: 'i' } },
-                { description: { $regex: input, $options: 'i' } },
-                { category: { $regex: input, $options: 'i' } },
-                { level: { $regex: input, $options: 'i' } },
-            ]
-        });
-        if (courses.length > 0) {
-            return res.status(200).json(courses)
-        }
-        else {
-            const courses = await Course.find({
-                isPublished: true,
-                $or: [
-                    { title: { $regex: keyword, $options: 'i' } },
-                    { subTitle: { $regex: keyword, $options: 'i' } },
-                    { description: { $regex: keyword, $options: 'i' } },
-                    { category: { $regex: keyword, $options: 'i' } },
-                    { level: { $regex: keyword, $options: 'i' } },
-                ]
-            });
-            return res.status(200).json(courses)
+        // 2. AI keyword only as a fallback, and allowed to fail
+        if (courses.length === 0) {
+            try {
+                const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
+                const response = await ai.models.generateContent({
+                    model: "gemini-2.5-flash",
+                    contents: buildPrompt(query),
+                })
+                const keyword = response.text?.trim().replace(/^[-\s]+|[.\s]+$/g, '')
+                if (keyword) courses = await findCourses(keyword)
+                    
+            } catch (aiError) {
+                console.log("AI keyword step failed:", aiError)
+            }
         }
 
+        return res.status(200).json(courses)
     } catch (error) {
         return res.status(500).json({ message: `Failed to search ${error}` })
     }
