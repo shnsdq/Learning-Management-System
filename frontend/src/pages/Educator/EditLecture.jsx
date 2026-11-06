@@ -11,27 +11,30 @@ import { ClipLoader } from 'react-spinners'
 const EditLecture = () => {
     const { courseId, lectureId } = useParams()
     const { lectureData } = useSelector(state => state.lecture)
-    const selectedLecture = lectureData.find(lecture => lecture._id === lectureId)
+    const selectedLecture = lectureData?.find(lecture => lecture._id === lectureId)
     const navigate = useNavigate()
-    const [lectureTitle, setLectureTitle] = useState(selectedLecture.lectureTitle)
-    const [videoUrl, setVideoUrl] = useState("")
-    const [isPreviewFree, setIsPreviewFree] = useState(false)
+    const [lectureTitle, setLectureTitle] = useState(selectedLecture?.lectureTitle || "")
+    const [videoFile, setVideoFile] = useState(null)
+    const [isPreviewFree, setIsPreviewFree] = useState(selectedLecture?.isPreviewFree || false)
     const [loading, setLoading] = useState(false)
     const [loading1, setLoading1] = useState(false)
     const dispatch = useDispatch()
 
-    const formData = new FormData()
-    formData.append("lectureTitle", lectureTitle),
-    formData.append("videoUrl", videoUrl),
-    formData.append("isPreviewFree", isPreviewFree)
-
+    useEffect(() => {
+        if (!selectedLecture) navigate(`/createlecture/${courseId}`, { replace: true })
+    }, [])
 
     const handleEditLecture = async () => {
         setLoading(true)
         try {
-            const result = await axios.post(serverUrl + `/api/course/editlecture/${lectureId}`, formData, { withCredentials: true })
+            const formData = new FormData()
+            formData.append("lectureTitle", lectureTitle)
+            formData.append("isPreviewFree", isPreviewFree)
+             if (videoFile) formData.append("videoUrl", videoFile)
             
-            dispatch(setLectureData([...lectureData, result.data]))
+            const result = await axios.post(serverUrl + `/api/course/editlecture/${lectureId}`, formData, { withCredentials: true })
+
+            dispatch(setLectureData(lectureData.map(l => l._id === lectureId ? result.data : l)))
             toast.success("Lecture Updated")
             navigate("/courses")
             setLoading(false)
@@ -46,6 +49,7 @@ const EditLecture = () => {
         setLoading1(true)
         try {
             const result = await axios.delete(serverUrl + `/api/course/removelecture/${lectureId}`, { withCredentials: true })
+            dispatch(setLectureData(lectureData.filter(l => l._id !== lectureId)))
             setLoading1(false)
             navigate(`/createlecture/${courseId}`)
             toast.success("Lecture Removed")
@@ -77,11 +81,11 @@ const EditLecture = () => {
                     </div>
                     <div>
                         <label htmlFor="" className='block text-sm font-medium text-gray-700 mb-1'>Video *</label>
-                        <input type="file" className='w-full p-2 border border-gray-300 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:bg-gray-800 file:text-[white] hover:file:bg-gray-500' required accept='video/*' onChange={(e) => setVideoUrl(e.target.files[0])} />
+                        <input type="file" className='w-full p-2 border border-gray-300 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:bg-gray-800 file:text-[white] hover:file:bg-gray-500' accept='video/*' onChange={(e) => setVideoFile(e.target.files[0])} />
                     </div>
 
                     <div className='flex items-center gap-3'>
-                        <input type="checkbox" className='accent-[black] h-4 w-4 ' id='isFree' onChange={(e) => setIsPreviewFree(prev => !prev)} />
+                        <input type="checkbox" className='accent-[black] h-4 w-4 ' id='isFree' checked={isPreviewFree} onChange={(e) => setIsPreviewFree(e.target.checked)} />
                         <label htmlFor="isFree" className='text-sm text-gray-700'>Is this Video FREE </label>
                     </div>
 
