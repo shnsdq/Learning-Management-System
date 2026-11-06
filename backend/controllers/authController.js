@@ -33,7 +33,7 @@ export const signup = async (req, res) => {
         })
 
         const safeUser = await User.findById(user._id)
-            .select('-password')
+            .select('-password -resetOtp -otpExpires -isOtpVerified')
             .populate("enrolledCourses") //currentUser controller is populating enrolledCourses also so the data should be in sync across app
 
         return res.status(200).json({ message: "SignUp successful", user: safeUser })
@@ -64,7 +64,7 @@ export const login = async (req, res) => {
         })
 
         const safeUser = await User.findById(user._id)
-            .select('-password')
+            .select('-password -resetOtp -otpExpires -isOtpVerified')
             .populate("enrolledCourses")
 
         return res.status(200).json({ message: "Login successful", user: safeUser })
@@ -174,7 +174,7 @@ export const googleAuth = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
         const safeUser = await User.findById(user._id)
-            .select('-password')
+            .select('-password -resetOtp -otpExpires -isOtpVerified')
             .populate("enrolledCourses")
 
         return res.status(200).json({ message: "Login successful", user: safeUser })
