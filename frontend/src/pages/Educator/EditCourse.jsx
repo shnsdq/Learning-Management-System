@@ -28,6 +28,7 @@ const EditCourse = () => {
   const [backendImage, setBackendImage] = useState(null)
   const [loading, setLoading] = useState(false)
   const [loading1, setLoading1] = useState(false)
+  const hasStudents = (selectCourse?.enrolledStudents?.length || 0) > 0
 
 
   const handleThumbnail = (e) => {
@@ -144,7 +145,14 @@ const EditCourse = () => {
             ? <button className='bg-green-100 text-green-600 px-4 py-2 rounded-md border-1' onClick={() => setIsPublished(prev => !prev)}>Click to Publish</button>
             : <button className='bg-red-100 text-red-600 px-4 py-2 rounded-md border-1' onClick={() => setIsPublished(prev => !prev)}>Click to UnPublish</button>}
 
-          <button className='bg-red-600 text-white px-4 py-2 rounded-md' onClick={handleRemoveCourse}>Remove Course</button>
+          <button
+            className={`px-4 py-2 rounded-md text-white ${hasStudents ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600'}`}
+            disabled={hasStudents || loading1}
+            title={hasStudents ? "Courses with enrolled students can't be deleted. Unpublish instead." : ""}
+            onClick={handleRemoveCourse}
+          >
+            Remove Course
+          </button>
         </div>
 
         <form className='space-y-6' onSubmit={(e) => e.preventDefault()}>
