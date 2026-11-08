@@ -11,56 +11,72 @@ const ViewLectures = () => {
     const { courseId } = useParams()
     const { courseData } = useSelector(state => state.course)
     const { userData } = useSelector(state => state.user)
-    const selectedCourse = courseData?.find((course) => course._id === courseId)
+    // const selectedCourse = courseData?.find((course) => course._id === courseId)
     const [creatorData, setCreatorData] = useState(null)
-    const [selectedLecture, setSelectedLecture] = useState(selectedCourse?.lectures?.[0] || null)
+    const [course, setCourse] = useState(null)
+    const [selectedLecture, setSelectedLecture] = useState(course?.lectures?.[0] || null)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const isCreator = String(selectedCourse?.creator?._id || selectedCourse?.creator) === String(userData?._id)
+
+    const isCreator = String(course?.creator?._id || course?.creator) === String(userData?._id)
     const isEnrolled = userData?.enrolledCourses?.some(c => String(c?._id || c) === String(courseId))
 
     useEffect(() => {
-        if (!userData || !selectedCourse) return
-        if (!isCreator && !isEnrolled) 
+        if (!userData || !course) return
+        if (!isCreator && !isEnrolled)
             navigate(`/viewcourse/${courseId}`, { replace: true })
-    }, [userData, selectedCourse, isCreator, isEnrolled])
+    }, [userData, course, isCreator, isEnrolled])
 
-    // Automatically fetch fresh courses when the component mounts
+
+
     useEffect(() => {
-        const fetchFreshCourses = async () => {
+        const load = async () => {
             try {
-                const result = await axios.get(serverUrl + "/api/course/getpublished", { withCredentials: true })
-                dispatch(setCourseData(result.data))
+                const res = await axios.get(serverUrl + `/api/course/createlecture/${courseId}`, { withCredentials: true })
+                setCourse(res.data)
             } catch (error) {
-                console.log("Error updating course data:", error)
+                navigate(`/viewcourse/${courseId}`, { replace: true })   // 403 or not found
             }
         }
-        fetchFreshCourses()
-    }, [dispatch])
+        load()
+    }, [courseId])
+
+    // Automatically fetch fresh courses when the component mounts
+    // useEffect(() => {
+    //     const fetchFreshCourses = async () => {
+    //         try {
+    //             const result = await axios.get(serverUrl + "/api/course/getpublished", { withCredentials: true })
+    //             dispatch(setCourseData(result.data))
+    //         } catch (error) {
+    //             console.log("Error updating course data:", error)
+    //         }
+    //     }
+    //     fetchFreshCourses()
+    // }, [dispatch])
 
     //Keep the video player and selected lecture updated when fresh data arrives
     useEffect(() => {
-        if (selectedCourse?.lectures?.length > 0) {
+        if (course?.lectures?.length > 0) {
             // Set the first lecture if nothing is selected yet, or keep the currently selected one
             if (!selectedLecture) {
-                setSelectedLecture(selectedCourse.lectures[0])
+                setSelectedLecture(course.lectures[0])
             } else {
                 // If a new lecture was added, make sure it syncs up in the state
-                const currentStillExists = selectedCourse.lectures.find(l => l._id === selectedLecture._id)
+                const currentStillExists = course.lectures.find(l => l._id === selectedLecture._id)
                 if (!currentStillExists) {
-                    setSelectedLecture(selectedCourse.lectures[0])
+                    setSelectedLecture(course.lectures[0])
                 }
             }
         }
-    }, [selectedCourse, selectedLecture])
+    }, [course, selectedLecture])
 
     useEffect(() => {
 
         const handleCreator = async () => {
-            if (selectedCourse?.creator) {
+            if (course?.creator) {
                 try {
-                    const result = await axios.post(serverUrl + "/api/course/creator", { userId: selectedCourse.creator }, { withCredentials: true })
+                    const result = await axios.post(serverUrl + "/api/course/creator", { userId: course.creator }, { withCredentials: true })
 
                     setCreatorData(result.data)
                 } catch (error) {
@@ -70,9 +86,9 @@ const ViewLectures = () => {
         }
 
         handleCreator()
-    }, [selectedCourse])
+    }, [course])
 
-    if (!userData || !selectedCourse || (!isCreator && !isEnrolled)) return null
+    if (!userData || !course || (!isCreator && !isEnrolled)) return null
 
     return (
         <div className='min-h-screen bg-gray-50 p-6 flex flex-col md:flex-row gap-6'>
@@ -81,11 +97,11 @@ const ViewLectures = () => {
             <div className='w-full md:w-2/3 bg-white rounded-2xl shadow-md p-6 border border-gray-200 '>
                 <div className='mb-6'>
 
-                    <h2 className='text-2xl font-bold flex items-center justify-start gap-[20px] text-gray-800 '><FaArrowLeftLong className='text-black w-[22px] h-[22px] cursor-pointer ' onClick={() => navigate(`/viewcourse/${courseId}`)} />{selectedCourse?.title} </h2>
+                    <h2 className='text-2xl font-bold flex items-center justify-start gap-[20px] text-gray-800 '><FaArrowLeftLong className='text-black w-[22px] h-[22px] cursor-pointer ' onClick={() => navigate(`/viewcourse/${courseId}`)} />{course?.title} </h2>
 
                     <div className='mt-2 flex gap-4 text-sm text-gray-500 font-medium'>
-                        <span>Category : {selectedCourse?.category} </span>
-                        <span>Level : {selectedCourse?.level}</span>
+                        <span>Category : {course?.category} </span>
+                        <span>Level : {course?.level}</span>
                     </div>
 
                 </div>
@@ -107,9 +123,9 @@ const ViewLectures = () => {
             <div className='w-full md:w-1/3 bg-white rounded-2xl shadow-md p-6 border border-gray-200 h-fit'>
                 <h2 className='text-xl font-bold mb-4 text-gray-800'>All Lectures</h2>
                 <div className='flex flex-col gap-3 mb-6'>
-                    {selectedCourse?.lectures?.length > 0
+                    {course?.lectures?.length > 0
 
-                        ? (selectedCourse?.lectures?.map((lecture, index) => (
+                        ? (course?.lectures?.map((lecture, index) => (
 
                             <button key={index} className={`flex items-center justify-between p-3 rounded-lg border transition text-left ${selectedLecture?._id === lecture._id ? 'bg-gray-200 border-gray-500' : 'hover:bg-gray-50 border-gray-300'}`} onClick={() => setSelectedLecture(lecture)} ><h2 className='text-sm font-semibold text-gray-800'> {lecture.lectureTitle}</h2> <FaPlayCircle className='text-lg text-black' />
                             </button>
