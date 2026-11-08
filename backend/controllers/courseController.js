@@ -28,7 +28,7 @@ export const getPublishedCourses = async (req, res) => {
     try {
         const courses = await Course.find({ isPublished: true }).populate("lectures reviews")
         if (!courses) {
-            return res.status(400).json({ message: "Courses is not found" })
+            return res.status(404).json({ message: "Courses is not found" })
         }
 
         return res.status(200).json(courses)
@@ -102,7 +102,7 @@ export const getCourseById = async (req, res) => {
         const { courseId } = req.params
         let course = await Course.findById(courseId)
         if (!course) {
-            return res.status(400).json({ message: "Course is not found" })
+            return res.status(404).json({ message: "Course is not found" })
         }
         return res.status(200).json(course)
 
@@ -120,6 +120,12 @@ export const removeCourse = async (req, res) => {
         }
         if (String(course.creator) !== String(req.userId)) {
             return res.status(403).json({ message: "Not allowed" })
+        }
+
+        if (course.enrolledStudents?.length > 0) {
+            return res.status(409).json({
+                message: "This course has enrolled students and can't be deleted. Unpublish it instead."
+            })
         }
 
         await Lecture.deleteMany({ _id: { $in: course.lectures } })
@@ -245,7 +251,7 @@ export const getCreatorById = async (req, res) => {
     try {
         const { userId } = req.body
 
-       const user = await User.findById(userId).select("name description photoUrl email role")
+        const user = await User.findById(userId).select("name description photoUrl email role")
 
         if (!user) {
             return res.status(404).json({ message: "User is not found" })
