@@ -1,34 +1,16 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { serverUrl } from '../App'
 import { FaArrowLeftLong } from 'react-icons/fa6'
 import { FaPlayCircle } from "react-icons/fa";
-import { setCourseData } from '../redux/courseSlice'
 
 const ViewLectures = () => {
     const { courseId } = useParams()
-    const { courseData } = useSelector(state => state.course)
-    const { userData } = useSelector(state => state.user)
-    // const selectedCourse = courseData?.find((course) => course._id === courseId)
     const [creatorData, setCreatorData] = useState(null)
     const [course, setCourse] = useState(null)
     const [selectedLecture, setSelectedLecture] = useState(course?.lectures?.[0] || null)
     const navigate = useNavigate()
-    const dispatch = useDispatch()
-
-
-    const isCreator = String(course?.creator?._id || course?.creator) === String(userData?._id)
-    const isEnrolled = userData?.enrolledCourses?.some(c => String(c?._id || c) === String(courseId))
-
-    useEffect(() => {
-        if (!userData || !course) return
-        if (!isCreator && !isEnrolled)
-            navigate(`/viewcourse/${courseId}`, { replace: true })
-    }, [userData, course, isCreator, isEnrolled])
-
-
 
     useEffect(() => {
         const load = async () => {
@@ -41,19 +23,6 @@ const ViewLectures = () => {
         }
         load()
     }, [courseId])
-
-    // Automatically fetch fresh courses when the component mounts
-    // useEffect(() => {
-    //     const fetchFreshCourses = async () => {
-    //         try {
-    //             const result = await axios.get(serverUrl + "/api/course/getpublished", { withCredentials: true })
-    //             dispatch(setCourseData(result.data))
-    //         } catch (error) {
-    //             console.log("Error updating course data:", error)
-    //         }
-    //     }
-    //     fetchFreshCourses()
-    // }, [dispatch])
 
     //Keep the video player and selected lecture updated when fresh data arrives
     useEffect(() => {
@@ -88,7 +57,7 @@ const ViewLectures = () => {
         handleCreator()
     }, [course])
 
-    if (!userData || !course || (!isCreator && !isEnrolled)) return null
+    if ( !course ) return null
 
     return (
         <div className='min-h-screen bg-gray-50 p-6 flex flex-col md:flex-row gap-6'>
