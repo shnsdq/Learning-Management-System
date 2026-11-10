@@ -74,7 +74,11 @@ export const editCourse = async (req, res) => {
         // Ensure thumbnail is only updated if a new file is uploaded
         let thumbnail = course.thumbnail
         if (req.file) {
-            thumbnail = await uploadOnCloudinary(req.file.path)
+            const uploaded = await uploadOnCloudinary(req.file.path)
+            if (!uploaded) {
+                return res.status(500).json({ message: "Thumbnail upload failed. Nothing was changed." })
+            }
+            thumbnail = uploaded
         }
 
         // Explicitly parse "isPublished" string into a real Boolean
@@ -91,7 +95,7 @@ export const editCourse = async (req, res) => {
             thumbnail
         }
 
-        const updatedCourse = await Course.findByIdAndUpdate(courseId, updateData, { new: true })
+        const updatedCourse = await Course.findByIdAndUpdate(courseId, updateData, { new: true, runValidators: true })
 
         return res.status(200).json({
             course: updatedCourse,
@@ -194,7 +198,8 @@ export const getCourseLecture = async (req, res) => {
         return res.status(200).json(data)
 
     } catch (error) {
-        return res.status(500).json({ message: `Failed to get Course Lecture ${error}` })
+        console.log(error)
+        return res.status(500).json({ message: "Something went wrong"})
     }
 }
 
