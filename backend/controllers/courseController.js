@@ -153,7 +153,7 @@ export const removeCourse = async (req, res) => {
 
 export const createLecture = async (req, res) => {
     try {
-        const { lectureTitle } = req.body
+        const lectureTitle = req.body.lectureTitle?.trim()
         const { courseId } = req.params
         if (!lectureTitle || !courseId) {
             return res.status(400).json({ message: "LectureTitle or courseId is required" })
