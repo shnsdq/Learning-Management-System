@@ -49,7 +49,7 @@ const CreateCourses = () => {
               <option value="Ethical Hacking">Ethical Hacking</option>
               <option value="UI UX Designing">UI UX Designing</option>
               <option value="Web Development">Web Development</option>
-              <option value="others">others</option>
+              <option value="Others">others</option>
             </select>
           </div>
           <button className='w-full bg-[black] text-white py-2 px-4 rounded-md active:bg-[#3a3a3a] transition ' onClick={handleCreateCourse}>{loading ? <ClipLoader size={30} color='white' /> : "Create"}</button>
