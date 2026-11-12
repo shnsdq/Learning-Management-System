@@ -3,10 +3,12 @@ import mongoose from 'mongoose'
 const courseSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     subTitle: {
-        type: String
+        type: String,
+        trim: true
     },
     description: {
         type: String
@@ -17,10 +19,11 @@ const courseSchema = new mongoose.Schema({
     },
     level: {
         type: String,
-        enum: ["Beginner", "Intermediate", "Advanced"]
+        enum: ["Beginner", "Intermediate", "Advanced",""]
     },
     price: {
-        type: Number
+        type: Number,
+        min: 0
     },
     thumbnail: {
         type: String
@@ -35,11 +38,14 @@ const courseSchema = new mongoose.Schema({
     }],
     creator: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true,
+        index: true
     },
     isPublished: {
         type: Boolean,
-        default: false
+        default: false,
+        index: true
     },
     reviews: [{
         type: mongoose.Schema.Types.ObjectId,
