@@ -43,10 +43,10 @@ export const searchWithAi = async (req, res) => {
         }
         const query = input.trim()
 
-        // 1. plain search first: fast, no AI cost
+        // plain search first: fast, no AI cost
         let courses = await findCourses(query)
 
-        // 2. AI keyword only as a fallback, and allowed to fail
+        // AI keyword only as a fallback, and allowed to fail
         if (courses.length === 0) {
             try {
                 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
