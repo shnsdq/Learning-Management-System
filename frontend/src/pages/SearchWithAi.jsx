@@ -30,7 +30,7 @@ const SearchWithAi = () => {
       if (!query?.trim()) return
       const result = await axios.post(serverUrl + '/api/course/search', { input: query }, { withCredentials: true })
       setRecommendations(result.data)
-      setSearched(true)   
+      setSearched(true)
 
       if (result.data.length > 0) {
         speak("These are the top courses I found for you")
@@ -106,11 +106,11 @@ const SearchWithAi = () => {
 
           </div>
         )
-        : (listening 
-          ? <h1 className='text-center text-xl sm:text-2xl mt-10 text-gray-400'>Listening...</h1> 
+        : (listening
+          ? <h1 className='text-center text-xl sm:text-2xl mt-10 text-gray-400'>Listening...</h1>
           : <h1 className='text-center text-xl sm:text-2xl mt-10 text-gray-400'>
-             {searched ? "No courses found for your search" : "Search or speak to find courses"}
-              </h1>
+            {searched ? "No courses found for your search" : "Search or speak to find courses"}
+          </h1>
 
         )}
 
