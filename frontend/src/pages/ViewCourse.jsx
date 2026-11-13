@@ -89,7 +89,6 @@ const ViewCourse = () => {
   const handleEnroll = async (userId, courseId) => {
     try {
       const orderData = await axios.post(serverUrl + "/api/order/razorpay-order", { userId, courseId }, { withCredentials: true })
-      console.log(orderData)
 
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
@@ -99,7 +98,7 @@ const ViewCourse = () => {
         description: "COURSE ENROLLMENT PAYMENT",
         order_id: orderData.data.id,
         handler: async function (response) {
-          console.log("RazorPay Response", response)
+
           try {
             const verifyPayment = await axios.post(serverUrl + "/api/order/verifypayment", {
               ...response,
@@ -119,6 +118,7 @@ const ViewCourse = () => {
           }
         }
       }
+
       const rzp = new window.Razorpay(options)
       rzp.open()
 
@@ -143,7 +143,7 @@ const ViewCourse = () => {
     } catch (error) {
       setLoading(false)
       toast.error(error?.response?.data?.message)
-      
+
     }
   }
 
