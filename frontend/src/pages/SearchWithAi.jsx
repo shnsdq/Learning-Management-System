@@ -49,6 +49,7 @@ const SearchWithAi = () => {
       toast.error("Speech recognition not supported")
       return
     }
+    
     const recognition = new SR()
     recognition.onresult = async (e) => {
       const transcript = e.results[0][0].transcript.trim()
@@ -78,9 +79,9 @@ const SearchWithAi = () => {
         <div className='flex items-center bg-gray-700 rounded-full overflow-hidden shadow-lg relative w-full'>
           <input type="text" className='flex-grow px-4 py-3 bg-transparent text-white placeholder-gray-400 focus:outline-none text-sm sm:text-base' placeholder='What do you want to learn? (e.g. AI, MERN, Cloud...)' onChange={(e) => setInput(e.target.value)} value={input} />
 
-          {input && <button className='absolute right-14 sm:right-16 bg-white rounded-full ' onClick={() => handleRecommendation(input)}><img src={ai} alt="" className='w-10 h-10 p-2 rounded-full' /> </button>}
+          <button className='absolute right-14 sm:right-16 bg-white rounded-full ' onClick={() => handleRecommendation(input)}><img src={ai} alt="" className='w-10 h-10 p-2 rounded-full' /> </button>
 
-          <button className='absolute right-2 bg-white rounded-full w-10 h-10 flex items-center justify-center ' onClick={handleSearch}>
+          <button className='absolute right-2 bg-white rounded-full w-10 h-10 flex items-center justify-center ' onClick={handleSearch} disabled={listening}>
             <RiMicAiFill className='w-5 h-5 text-[#cb87c5] ' />
           </button>
         </div>
