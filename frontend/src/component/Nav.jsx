@@ -24,7 +24,7 @@ const Nav = () => {
       toast.success(response.data.message);
 
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message);
     }
   }
 
@@ -40,7 +40,8 @@ const Nav = () => {
           {!userData && <IoPersonCircle className='w-[50px] h-[50px] fill-black cursor-pointer' onClick={() => setShow(prev => !prev)} />
           }
 
-          {userData?.photoUrl ? <img src={userData?.photoUrl} alt="" className='w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer' onClick={() => setShow(prev => !prev)} />
+          {userData?.photoUrl
+            ? <img src={userData?.photoUrl} alt="" className='w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer' onClick={() => setShow(prev => !prev)} />
             : <div className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer " onClick={() => setShow(prev => !prev)}>
               {userData?.name?.slice(0, 1).toUpperCase()}
             </div>}
