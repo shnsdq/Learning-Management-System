@@ -3,6 +3,7 @@ import { FaStar } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
 const Card = ({ thumbnail, title, category, price, id,reviews }) => {
+  
    const calculateAvgReview = (reviews) => {
       if(!reviews || reviews.length === 0){
         return 0
@@ -13,8 +14,6 @@ const Card = ({ thumbnail, title, category, price, id,reviews }) => {
   }
 
   const avgRating = calculateAvgReview(reviews)
-
-
 
   const navigate = useNavigate()
 
