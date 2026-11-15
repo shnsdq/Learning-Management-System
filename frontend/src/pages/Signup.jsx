@@ -86,8 +86,8 @@ const Signup = () => {
           <div className='flex flex-col gap-1 w-[80%] items-start justify-center px-3 relative'>
             <label htmlFor="password" className='font-semibold'>Password</label>
             <input id='password' type={show ? "text" : "password"} placeholder='Password' className='border-1 w-[100%] h-[35px] border-[#e7e6e6] text-[15px] px-[20px]' onChange={(e) => setPassword(e.target.value)} value={password} />
-            {!show ?
-              <IoEyeOutline onClick={() => setShow(prev => !prev)} className='absolute w-[20px] h-[20px] cursor-pointer right-[5%] bottom-[10%]' />
+            {!show
+              ? <IoEyeOutline onClick={() => setShow(prev => !prev)} className='absolute w-[20px] h-[20px] cursor-pointer right-[5%] bottom-[10%]' />
               : <IoEye onClick={() => setShow(prev => !prev)} className='absolute w-[20px] h-[20px] cursor-pointer right-[5%] bottom-[10%]' />}
           </div>
 
