@@ -19,18 +19,18 @@ const Profile = () => {
             </div>
           }
 
-          <h2 className='text-2xl font-bold mt-4 text-gray-800'>{userData.name} </h2>
-          <p className='text-sm text-gray-500'>{userData.role} </p>
+          <h2 className='text-2xl font-bold mt-4 text-gray-800'>{userData?.name} </h2>
+          <p className='text-sm text-gray-500'>{userData?.role} </p>
         </div>
 
         <div className='mt-6 space-y-4'>
           <div className='text-sm flex items-center justify-start gap-1 '>
             <span className='font-semibold text-gray-700'>Email:</span>
-            <span>{userData.email} </span>
+            <span>{userData?.email} </span>
           </div>
           <div className='text-sm flex items-center justify-start gap-1'>
             <span className='font-semibold text-gray-700'>Bio:</span>
-            <span>{userData.description} </span>
+            <span>{userData?.description} </span>
           </div>
           <div className='text-sm flex items-center justify-start gap-1'>
             <span className='font-semibold text-gray-700'>Enrolled Courses:</span>
