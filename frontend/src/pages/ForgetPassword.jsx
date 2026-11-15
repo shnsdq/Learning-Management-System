@@ -24,7 +24,7 @@ const ForgetPassword = () => {
 
         } catch (error) {
             setLoading(false)
-            toast.error(error.response.data.message)
+            toast.error(error?.response?.data?.message)
         }
     }
 
@@ -37,8 +37,7 @@ const ForgetPassword = () => {
             setStep(3)
             toast.success(result.data.message)
         } catch (error) {
-
-            toast.error(error.response.data.message)
+            toast.error(error?.response?.data?.message)
             setLoading(false)
         }
     }
@@ -58,9 +57,10 @@ const ForgetPassword = () => {
             setLoading(false)
             toast.success(result.data.message)
             navigate("/login")
+
         } catch (error) {
             setLoading(false)
-            toast.error(error.response.data.message)
+            toast.error(error?.response?.data?.message)
         }
     }
 
