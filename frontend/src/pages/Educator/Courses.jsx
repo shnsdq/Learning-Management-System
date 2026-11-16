@@ -22,7 +22,7 @@ const Courses = () => {
         dispatch(setCreatorCourseData(result.data))
 
       } catch (error) {
-        toast.error(response.data.error.message)
+        toast.error(response?.data?.error?.message)
       }
     }
     creatorCourses()
@@ -86,10 +86,12 @@ const Courses = () => {
         <div className='md:hidden space-y-4'>
           {creatorCourseData?.map((course, index) => (
             <div key={index} className='bg-white rounded-lg shadow p-4 flex flex-col gap-3'>
-              <div className='flex ga-4 items-center'>
+              <div className='flex gap-4 items-center'>
                 {course?.thumbnail ? <img src={course?.thumbnail} alt="" className='w-16 rounded-md object-cover' /> : <img src={img} alt="" className='w-16 rounded-md object-cover' />}
                 <div className='flex-1'>
+                  
                   <h2 className='font-medium text-sm'>{course?.title}</h2>
+                  
                   {course?.price ? <p className='text-gray-600 text-xs mt-1'>₹ {course?.price} </p> : <p className='text-gray-600 text-xs mt-1'>₹ NA</p>}
                 </div>
                 <FaEdit className='text-gray-600 hover:text-blue-600 cursor-pointer' onClick={() => navigate(`/editcourse/${course?._id}`)} />
