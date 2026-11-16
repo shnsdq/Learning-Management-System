@@ -17,12 +17,13 @@ const EditProfile = () => {
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
 
-    const formData = new FormData()
-    formData.append("name", name),
-    formData.append("description", description),
-    formData.append("photoUrl", photoUrl)
-
     const handleEditProfile = async () => {
+        setLoading(true)
+        const formData = new FormData()
+        formData.append("name", name)
+        formData.append("description", description)
+        formData.append("photoUrl", photoUrl)
+
         try {
             const result = await axios.post(serverUrl + "/api/user/profile", formData, { withCredentials: true })
             dispatch(setUserData(result.data))
@@ -44,8 +45,9 @@ const EditProfile = () => {
                 <form action="" className='space-y-5' onSubmit={(e) => e.preventDefault()}>
                     <div className='flex flex-col items-center text-center'>
 
-                        {userData?.photoUrl ? <img src={userData?.photoUrl} className='w-24 h-24 rounded-full object-cover border-4 border-[black]' alt="" /> :
-                            <div className='w-24 h-24 rounded-full text-white flex items-center justify-center text-[30px] border-2 bg-[black] border-white'>
+                        {userData?.photoUrl
+                            ? <img src={userData?.photoUrl} className='w-24 h-24 rounded-full object-cover border-4 border-[black]' alt="" />
+                            : <div className='w-24 h-24 rounded-full text-white flex items-center justify-center text-[30px] border-2 bg-[black] border-white'>
                                 {userData?.name.slice(0, 1).toUpperCase()}
                             </div>}
                     </div>
@@ -63,7 +65,6 @@ const EditProfile = () => {
                         <label htmlFor="name" className='text-sm font-medium text-gray-700'> UserName</label>
                         <input id='name' type="text"
                             placeholder={userData.name}
-                            accept='image/*'
                             className='w-full px-4 py-2 border rounded-md text-sm '
                             onChange={(e) => setName(e.target.value)} value={name} />
                     </div>
