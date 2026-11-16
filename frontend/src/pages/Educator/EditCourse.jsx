@@ -114,7 +114,7 @@ const EditCourse = () => {
       const filterCourses = courseData.filter(c => c._id !== courseId)
       dispatch(setCourseData(filterCourses))
       setLoading1(false)
-      toast.success(result.data.message)
+      toast.success(result?.data?.message)
       navigate('/courses')
 
     } catch (error) {
@@ -132,7 +132,7 @@ const EditCourse = () => {
 
         <h2 className='text-2xl font-semibold md:pl-[60px] '>Add Detail Information regarding the course</h2>
         <div className='space-x-2 space-y-2'>
-          <button className='bg-black text-white px-4 py-2 rounded-md' onClick={() => navigate(`/createlecture/${selectCourse?._id}`)}>Go to Lecture page</button>
+          <button className='bg-black text-white px-4 py-2 rounded-md' onClick={() => navigate(`/createlecture/${selectCourse?._id}`)}>Go to Lecture Page</button>
         </div>
 
       </div>
