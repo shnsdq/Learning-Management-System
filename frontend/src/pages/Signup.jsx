@@ -110,7 +110,7 @@ const Signup = () => {
           </div>
 
           <div className='text-[#6f6f6f] '>already have an account
-            <span onClick={() => navigate('/login')} className='underline underline-offset-1 text-[black] '>Login</span>
+            <span onClick={() => navigate('/login')} className='underline underline-offset-1 text-[black] cursor-pointer'>Login</span>
           </div>
 
         </div>
