@@ -11,13 +11,14 @@ const getCreatorCourse = () => {
 
   return (
     useEffect(() => {
+        if (userData?.role !== "educator") return
         const creatorCourses = async () => {
             try {
                 const result = await axios.get(serverUrl + '/api/course/getcreator', {withCredentials:true} )
                  dispatch(setCreatorCourseData(result.data))
 
             } catch (error) {
-                toast.error(error.response.data.message)
+                toast.error(error?.response?.data?.message || "Failed to load courses")   
             }
         }
         creatorCourses()
