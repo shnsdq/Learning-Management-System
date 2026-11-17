@@ -90,6 +90,7 @@ const EditCourse = () => {
           : [...currentCourseData, updateData]
 
         dispatch(setCourseData(updateCourses))
+
       } else {
         const filterCourses = currentCourseData.filter(c => c._id !== courseId)
         dispatch(setCourseData(filterCourses))
@@ -128,7 +129,7 @@ const EditCourse = () => {
     <div className='max-w-5xl mx-auto p-6 mt-10 bg-white rounded-lg shadow-md'>
       {/* top bar */}
       <div className='flex items-center justify-center gap-[20px] md:justify-between flex-col md:flex-row mb-6 relative '>
-        <FaArrowLeftLong className='top-[-20%] md:top-[20px] absolute left-[0] md:left-[2%] w-[22px] h-[22px] cursor-pointer' onClick={() => navigate('/courses')} />
+        <FaArrowLeftLong className='top-[20%] md:top-[20px] absolute left-[0] md:left-[2%] w-[22px] h-[22px] cursor-pointer' onClick={() => navigate('/courses')} />
 
         <h2 className='text-2xl font-semibold md:pl-[60px] '>Add Detail Information regarding the course</h2>
         <div className='space-x-2 space-y-2'>
@@ -138,7 +139,7 @@ const EditCourse = () => {
       </div>
 
       {/* form details */}
-      <div className='bg-gray-50 p-6 rounded-md'>
+      <div className='bg-gray-70 p-6 rounded-md'>
         <h2 className='text-lg font-medium mb-4'>Basic Course Information</h2>
         <div className='space-x-2 space-y-2'>
           {!isPublished
@@ -184,9 +185,7 @@ const EditCourse = () => {
                 <option value="UI UX Designing">UI UX Designing</option>
                 <option value="Web Development">Web Development</option>
                 <option value="Others">Others</option>
-
               </select>
-
             </div>
 
             {/* for level */}
@@ -197,9 +196,7 @@ const EditCourse = () => {
                 <option value="Beginner">Beginner</option>
                 <option value="Intermediate">Intermediate</option>
                 <option value="Advanced">Advanced</option>
-
               </select>
-
             </div>
 
             {/* for price */}
@@ -210,14 +207,13 @@ const EditCourse = () => {
           </div>
 
           <div>
-
             <label htmlFor="" className='block text-sm font-medium text-gray-700 mb-1'>Course Thumbnail</label>
             <input type="file" hidden ref={thumb} accept='image/*' onChange={handleThumbnail} />
           </div>
 
-          <div className='relative w-[300px] h-[170px] '>
-            <img src={frontendImage} alt="" className='w-[100%] h-[100%] border-1 border-black rounded-[5px]' onClick={() => thumb.current.click()} />
-            <FaEdit className='w-[20px] h-[20px] absolute top-2 right-2 ' onClick={() => thumb.current.click()} />
+          <div className='relative w-[300px] h-[170px]'>
+            <img src={frontendImage} alt="" className='w-[100%] h-[100%] border-1 border-black rounded-[5px] cursor-pointer' onClick={() => thumb.current.click()} />
+            <FaEdit className='w-[20px] h-[20px] absolute top-2 right-2 cursor-pointer ' onClick={() => thumb.current.click()} />
           </div>
 
           <div className='flex items-center justify-start gap-[15px] '>
