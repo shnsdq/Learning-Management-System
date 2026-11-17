@@ -104,7 +104,7 @@ const Login = () => {
             <span className='text-[18px] text-gray-500 '>oogle</span>
           </div>
           <div className='text-[#6f6f6f] '>Create account
-            <span onClick={() => navigate('/signup')} className='underline underline-offset-1 text-[black] '>Signup</span>
+            <span onClick={() => navigate('/signup')} className='underline underline-offset-1 text-[black] cursor-pointer'>Signup</span>
           </div>
 
         </div>
