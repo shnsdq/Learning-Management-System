@@ -173,7 +173,9 @@ const ViewCourse = () => {
           {/* thumbnail */}
           <div className='w-full md:w-1/2'>
             <FaArrowLeftLong className='text-[black] w-[22px] h-[22px] cursor-pointer' onClick={() => navigate("/")} />
-            {selectedCourse?.thumbnail ? <img src={selectedCourse?.thumbnail} alt="" className='rounded-xl w-full object-cover' /> : <img src={img} alt="" className='rounded-xl w-full object-cover' />}
+            {selectedCourse?.thumbnail
+              ? <img src={selectedCourse?.thumbnail} alt="" className='rounded-xl w-full object-cover' />
+              : <img src={img} alt="" className='rounded-xl w-full object-cover' />}
 
           </div>
 
@@ -253,7 +255,8 @@ const ViewCourse = () => {
           <div className='bg-white w-full md:w-3/5 p-6 rounded-2xl shadow-lg border border-gray-200'>
             <div className='aspect-video w-full rounded-lg overflow-hidden mb-4 bg-black flex items-center justify-center'>
               {
-                selectedLecture?.videoUrl ? <video src={selectedLecture?.videoUrl} controls className='w-full h-full object-cover' />
+                selectedLecture?.videoUrl
+                  ? <video src={selectedLecture?.videoUrl} controls className='w-full h-full object-cover' />
                   : <span className='text-white text-sm'>
                     Select a preview lecture to watch
                   </span>
@@ -290,7 +293,9 @@ const ViewCourse = () => {
         )}
         {/* for creator info */}
         <div className='flex items-center gap-4 pt-4 border-t'>
-          {creatorData?.photoUrl ? <img src={creatorData?.photoUrl} alt="" className=' border border-gray-400 w-16 h-16 rounded-full object-cover' /> : <img src={img} alt="" className=' border border-gray-400 w-16 h-16 rounded-full object-cover' />
+          {creatorData?.photoUrl
+            ? <img src={creatorData?.photoUrl} alt="" className=' border border-gray-400 w-16 h-16 rounded-full object-cover' />
+            : <img src={img} alt="" className=' border border-gray-400 w-16 h-16 rounded-full object-cover' />
           }
           <div>
             <h2 className='text-lg font-semibold'>{creatorData?.name} </h2>
